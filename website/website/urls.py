@@ -13,5 +13,9 @@ urlpatterns = patterns(
     # Nonetheless, it's often useful for debugging.
     url(r'^admin/', include(admin.site.urls)),
 
+    #For future PayPal integration
+    # (r'^checkout/paypal/', include('paypal.express.urls')),
+
+
     url(r'', include(application.urls)),
 ) + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

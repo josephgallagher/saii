@@ -34,6 +34,10 @@ ALLOWED_HOSTS = []
 OSCAR_SHOP_NAME = 'SA Instruments, Inc.'
 OSCAR_DEFAULT_CURRENCY = 'USD'
 
+# PAYPAL_API_USERNAME = 'uhhhmmm-facilitator_api1.gmail.com'
+# PAYPAL_API_PASSWORD = 'VWJHPBEBR8Z34RCT'
+# PAYPAL_API_SIGNATURE = 'AFcWxV21C7fd0v3bYYYRCpSSRl31ArxgHzKe2jfF6SSUgastSMhqTeJL'
+
 # Application definition
 
 from oscar import get_core_apps
@@ -49,6 +53,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
     'compressor',
     'widget_tweaks',
+    # 'paypal',
 ] + get_core_apps(['website.apps.checkout'])
 
 SITE_ID = 1
