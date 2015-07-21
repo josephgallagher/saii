@@ -1,6 +1,11 @@
 __author__ = 'joseph'
 
 from oscar.apps.checkout.views import *
+from django.contrib.sites.models import Site, get_current_site
+from django.core.urlresolvers import reverse, NoReverseMatch
+
+
+Dispatcher = get_class('customer.utils', 'Dispatcher')
 # Email = get_model('customer', 'Email')
 # CommunicationEventType = get_model('customer', 'CommunicationEventType')
 
@@ -10,42 +15,81 @@ from oscar.apps.checkout.views import *
 # ===============
 
 
-class RequestQuoteView(CheckoutSessionMixin, generic.FormView):
+class RequestQuoteView(CheckoutSessionMixin, generic.TemplateView):
     template_name = 'checkout/request_quote.html'
     communication_type_code = 'QUOTE_GENERATED'
     pre_conditions = ['check_basket_is_not_empty',
                       'check_basket_is_valid',
                       'check_user_email_is_captured']
 
-    def get_form_kwargs(self):
-        kwargs = super(RequestQuoteView, self).get_form_kwargs()
-        kwargs['user'] = self.request.user
-        return kwargs
+    # def send_confirmation_message(self, order, code, **kwargs):
+    #     ctx = self.get_message_context(order)
+    #     try:
+    #         event_type = CommunicationEventType.objects.get(code=code)
+    #     except CommunicationEventType.DoesNotExist:
+    #         # No event-type in database, attempt to find templates for this
+    #         # type and render them immediately to get the messages.  Since we
+    #         # have not CommunicationEventType to link to, we can't create a
+    #         # CommunicationEvent instance.
+    #         messages = CommunicationEventType.objects.get_and_render(code, ctx)
+    #         event_type = None
+    #     else:
+    #         messages = event_type.get_messages(ctx)
+    #
+    #     if messages and messages['body']:
+    #         logger.info("Order #%s - sending %s messages", order.number, code)
+    #         dispatcher = Dispatcher(logger)
+    #         dispatcher.dispatch_order_messages(order, messages,
+    #                                            event_type, **kwargs)
+    #     else:
+    #         logger.warning("Order #%s - no %s communication event type",
+    #                        order.number, code)
+    #
+    # def get_message_context(self, order):
+    #     ctx = {
+    #         'user': self.request.user,
+    #         'order': order,
+    #         'site': get_current_site(self.request),
+    #         'lines': order.lines.all()
+    #     }
+    #
+    #     if not self.request.user.is_authenticated():
+    #         # Attempt to add the anon order status URL to the email template
+    #         # ctx.
+    #         try:
+    #             path = reverse('customer:anon-order',
+    #                            kwargs={'order_number': order.number,
+    #                                    'hash': order.verification_hash()})
+    #         except NoReverseMatch:
+    #             # We don't care that much if we can't resolve the URL
+    #             pass
+    #         else:
+    #             site = Site.objects.get_current()
+    #             ctx['status_url'] = 'http://%s%s' % (site.domain, path)
+    #     return ctx
 
-    def get(self, request, *args, **kwargs):
-        # By default we redirect straight onto the payment details view. Shops
-        # that require a choice of payment method may want to override this
-        # method to implement their specific logic.
-        return self.get_success_response()
-
-    def get_success_response(self):
-        from django.core.mail import send_mail
-        send_mail('Subject here', 'Here is the message.', 'from@example.com', [self.request.user.email], fail_silently=False)
-        return redirect('checkout:request_quote')
 
 
-from django.contrib import messages
-from django import http
-from django.core.urlresolvers import reverse
-from django.utils.translation import ugettext_lazy as _
+
+
+
+
+
+
+
+
+# from django.contrib import messages
+# from django import http
+# from django.core.urlresolvers import reverse
+# from django.utils.translation import ugettext_lazy as _
 # from datacash.facade import Facade
 
-from oscar.apps.checkout import views, exceptions
-from oscar.apps.payment.forms import BankcardForm
-from oscar.apps.payment.models import SourceType
-from oscar.apps.order.models import BillingAddress
-
-from .forms import BillingAddressForm
+# from oscar.apps.checkout import views, exceptions
+# from oscar.apps.payment.forms import BankcardForm
+# from oscar.apps.payment.models import SourceType
+# from oscar.apps.order.models import BillingAddress
+#
+# from .forms import BillingAddressForm
 
 
 # Customise the core PaymentDetailsView to integrate Datacash
