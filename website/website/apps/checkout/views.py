@@ -136,10 +136,11 @@ class PaymentDetailsView(views.PaymentDetailsView):
         bankcard_form = BankcardForm(request.POST)
         shipping_address = self.get_shipping_address(
             self.request.basket)
-        billing_address = self.get_billing_address_form(self.request.basket)
-        address_form = BillingAddressForm(billing_address, request.POST)
+        address_form = BillingAddressForm(shipping_address, request.POST)
 
         print address_form.is_valid()
+        print bankcard_form.is_valid()
+
 
         if address_form.is_valid() and bankcard_form.is_valid():
             # If both forms are valid, we render the preview view with the
@@ -162,6 +163,15 @@ class PaymentDetailsView(views.PaymentDetailsView):
         address_form = BillingAddressForm(shipping_address, request.POST)
 
         print address_form.is_valid()
+        # print "Bound: %r" % address_form.is_bound
+        if address_form.errors:
+            # print address_form.country
+            messages.error(request, address_form.errors)
+        if address_form.has_changed():
+            print address_form
+            print address_form.cleaned_data
+            print address_form.changed_data
+        print bankcard_form.is_valid()
 
         if address_form.is_valid() and bankcard_form.is_valid():
             # Forms still valid, let's submit an order
@@ -179,7 +189,6 @@ class PaymentDetailsView(views.PaymentDetailsView):
         # Must be DOM tampering as these forms were valid and were rendered in
         # a hidden element.  Hence, we don't need to be that friendly with our
         # error message.
-
         messages.error(request, _("Invalid submission"))
         return http.HttpResponseRedirect(
             reverse('checkout:payment-details'))
@@ -207,5 +216,3 @@ class PaymentDetailsView(views.PaymentDetailsView):
         # Also record payment event
         self.add_payment_event(
             'pre-auth', total.incl_tax, reference=datacash_ref)
-
-
