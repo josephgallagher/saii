@@ -1,3 +1,16 @@
+# from oscar.apps.checkout import app
+#
+# import views
+#
+#
+# class CheckoutApplication(app.CheckoutApplication):
+#     # Replace the payment details view with our own
+#     payment_details_view = views.PaymentDetailsView
+#
+#
+# application = CheckoutApplication()
+
+
 from django.conf.urls import url
 from django.contrib.auth.decorators import login_required
 from django.conf import settings

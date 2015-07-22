@@ -1,6 +1,13 @@
 __author__ = 'joseph'
 
 from oscar.apps.checkout.views import *
+from django.contrib.sites.models import Site, get_current_site
+from django.core.urlresolvers import reverse, NoReverseMatch
+
+
+Dispatcher = get_class('customer.utils', 'Dispatcher')
+# Email = get_model('customer', 'Email')
+# CommunicationEventType = get_model('customer', 'CommunicationEventType')
 
 
 # ===============
@@ -15,12 +22,67 @@ class RequestQuoteView(CheckoutSessionMixin, generic.TemplateView):
                       'check_basket_is_valid',
                       'check_user_email_is_captured']
 
+    # def send_confirmation_message(self, order, code, **kwargs):
+    #     ctx = self.get_message_context(order)
+    #     try:
+    #         event_type = CommunicationEventType.objects.get(code=code)
+    #     except CommunicationEventType.DoesNotExist:
+    #         # No event-type in database, attempt to find templates for this
+    #         # type and render them immediately to get the messages.  Since we
+    #         # have not CommunicationEventType to link to, we can't create a
+    #         # CommunicationEvent instance.
+    #         messages = CommunicationEventType.objects.get_and_render(code, ctx)
+    #         event_type = None
+    #     else:
+    #         messages = event_type.get_messages(ctx)
+    #
+    #     if messages and messages['body']:
+    #         logger.info("Order #%s - sending %s messages", order.number, code)
+    #         dispatcher = Dispatcher(logger)
+    #         dispatcher.dispatch_order_messages(order, messages,
+    #                                            event_type, **kwargs)
+    #     else:
+    #         logger.warning("Order #%s - no %s communication event type",
+    #                        order.number, code)
+    #
+    # def get_message_context(self, order):
+    #     ctx = {
+    #         'user': self.request.user,
+    #         'order': order,
+    #         'site': get_current_site(self.request),
+    #         'lines': order.lines.all()
+    #     }
+    #
+    #     if not self.request.user.is_authenticated():
+    #         # Attempt to add the anon order status URL to the email template
+    #         # ctx.
+    #         try:
+    #             path = reverse('customer:anon-order',
+    #                            kwargs={'order_number': order.number,
+    #                                    'hash': order.verification_hash()})
+    #         except NoReverseMatch:
+    #             # We don't care that much if we can't resolve the URL
+    #             pass
+    #         else:
+    #             site = Site.objects.get_current()
+    #             ctx['status_url'] = 'http://%s%s' % (site.domain, path)
+    #     return ctx
+
+
+
+
+
+
+
+
+
+
 
 from django.contrib import messages
 from django import http
 from django.core.urlresolvers import reverse
 from django.utils.translation import ugettext_lazy as _
-# from datacash.facade import Facade
+from datacash.facade import Facade
 
 from oscar.apps.checkout import views, exceptions
 from oscar.apps.payment.forms import BankcardForm
@@ -76,6 +138,12 @@ class PaymentDetailsView(views.PaymentDetailsView):
             self.request.basket)
         address_form = BillingAddressForm(shipping_address, request.POST)
 
+        # print address_form.is_valid()
+        # print address_form.cleaned_data
+        # print address_form.changed_data
+        # print bankcard_form.is_valid()
+
+
         if address_form.is_valid() and bankcard_form.is_valid():
             # If both forms are valid, we render the preview view with the
             # forms hidden within the page. This seems odd but means we don't
@@ -95,6 +163,21 @@ class PaymentDetailsView(views.PaymentDetailsView):
         shipping_address = self.get_shipping_address(
             self.request.basket)
         address_form = BillingAddressForm(shipping_address, request.POST)
+
+
+        # print address_form.is_valid()
+        # print address_form.cleaned_data
+        # print address_form.changed_data
+        # print bankcard_form.is_valid()
+
+        # print "Bound: %r" % address_form.is_bound
+        # if address_form.errors:
+            # print address_form.country
+        #     messages.error(request, address_form.errors)
+        # if address_form.has_changed():
+        #     print address_form.cleaned_data
+        #     print address_form.changed_data
+
         if address_form.is_valid() and bankcard_form.is_valid():
             # Forms still valid, let's submit an order
             submission = self.build_submission(
