@@ -138,8 +138,10 @@ class PaymentDetailsView(views.PaymentDetailsView):
             self.request.basket)
         address_form = BillingAddressForm(shipping_address, request.POST)
 
-        print address_form.is_valid()
-        print bankcard_form.is_valid()
+        # print address_form.is_valid()
+        # print address_form.cleaned_data
+        # print address_form.changed_data
+        # print bankcard_form.is_valid()
 
 
         if address_form.is_valid() and bankcard_form.is_valid():
@@ -162,16 +164,19 @@ class PaymentDetailsView(views.PaymentDetailsView):
             self.request.basket)
         address_form = BillingAddressForm(shipping_address, request.POST)
 
-        print address_form.is_valid()
+
+        # print address_form.is_valid()
+        # print address_form.cleaned_data
+        # print address_form.changed_data
+        # print bankcard_form.is_valid()
+
         # print "Bound: %r" % address_form.is_bound
-        if address_form.errors:
+        # if address_form.errors:
             # print address_form.country
-            messages.error(request, address_form.errors)
-        if address_form.has_changed():
-            print address_form
-            print address_form.cleaned_data
-            print address_form.changed_data
-        print bankcard_form.is_valid()
+        #     messages.error(request, address_form.errors)
+        # if address_form.has_changed():
+        #     print address_form.cleaned_data
+        #     print address_form.changed_data
 
         if address_form.is_valid() and bankcard_form.is_valid():
             # Forms still valid, let's submit an order
