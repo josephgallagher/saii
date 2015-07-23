@@ -28,7 +28,7 @@
                 <div class="col-sm-8 col-md-9">
                     <form id="profile_form" class="form-stacked" action={% url 'checkout:shipping-address' %} method="post">
                         {% csrf_token %}
-                        <p>{% trans "Enter an email address to receive the quote for " %}{{ basket.total_excl_tax }}</p>
+                        <p>{% trans "Enter an email address to receive the quote for " %}{{ basket.total_excl_tax }} with ID: {{ basket.pk }}</p>
                         {% include 'oscar/partials/form_fields.html' with style='stacked' %}
                         <div class="form-group">
                             <input class="form-control" type="email" id="id_email" placeholder="Email address to receive quote"/>
