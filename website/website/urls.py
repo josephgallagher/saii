@@ -3,7 +3,9 @@ from django.conf.urls.static import static
 from django.conf import settings
 
 from django.contrib import admin
-from oscar.app import application
+# from oscar.app import application
+from app import application
+
 
 urlpatterns = patterns(
 
