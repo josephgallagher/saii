@@ -60,7 +60,7 @@ INSTALLED_APPS = [
     'widget_tweaks',
     'datacash',
     # 'paypal',
-] + get_core_apps(['website.apps.checkout', 'website.apps.quotations'])
+] + get_core_apps(['website.apps.checkout'])
 
 SITE_ID = 1
 
