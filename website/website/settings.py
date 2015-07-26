@@ -59,6 +59,8 @@ INSTALLED_APPS = [
     'compressor',
     'widget_tweaks',
     'datacash',
+    'website.apps.quotation',
+    'easy_pdf',
     # 'paypal',
 ] + get_core_apps(['website.apps.checkout'])
 

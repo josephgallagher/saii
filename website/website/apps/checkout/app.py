@@ -23,7 +23,7 @@ class CheckoutApplication(Application):
     name = 'checkout'
 
     index_view = get_class('checkout.views', 'IndexView')
-    request_quote_view = get_class('checkout.views', 'RequestQuoteView')
+    # request_quote_view = get_class('checkout.views', 'RequestQuoteView')
     shipping_address_view = get_class('checkout.views', 'ShippingAddressView')
     user_address_update_view = get_class('checkout.views',
                                          'UserAddressUpdateView')
@@ -39,8 +39,8 @@ class CheckoutApplication(Application):
             url(r'^$', self.index_view.as_view(), name='index'),
 
             #Request quote views
-            url(r'request-quote/$',
-                self.request_quote_view.as_view(), name='request-quote'),
+            # url(r'request-quote/$',
+            #     self.request_quote_view.as_view(), name='request-quote'),
 
             # Shipping/user address views
             url(r'shipping-address/$',
