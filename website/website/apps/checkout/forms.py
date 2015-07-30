@@ -1,6 +1,7 @@
 from django import forms
 
-from oscar.apps.payment import forms as payment_forms
+# from oscar.apps.payment import forms as payment_forms
+from ..payment import forms as payment_forms
 from oscar.apps.order.models import BillingAddress
 
 
