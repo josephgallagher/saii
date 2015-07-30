@@ -7,11 +7,6 @@ class StripeTokenForm(forms.Form):
 
 
 
-
-
-
-
-
 # from django import forms
 #
 # # from oscar.apps.payment import forms as payment_forms
