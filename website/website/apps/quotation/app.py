@@ -13,7 +13,7 @@ class QuotationApplication(Application):
 
     index_view = get_class('quotation.views', 'IndexView')
     request_quote_view = get_class('quotation.views', 'RequestQuoteView')
-    hello_pdf_view = get_class('quotation.views', 'HelloPDFView')
+    pdf_view = get_class('quotation.views', 'PDFView')
 
     def get_urls(self):
         urls = [
@@ -25,7 +25,7 @@ class QuotationApplication(Application):
             # url(r'request-quote/$',
             #     self.request_quote_view.as_view(), name='request-quote'),
             url(r'request-quote/$', self.request_quote_view.as_view(), name='request-quote'),
-            url(r'quote/$', self.hello_pdf_view.as_view(), name='pdf-quote')
+            url(r'quote/$', self.pdf_view.as_view(), name='pdf-quote')
 
         ]
         return self.post_process_urls(urls)

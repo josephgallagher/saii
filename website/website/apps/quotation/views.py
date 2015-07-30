@@ -105,7 +105,7 @@ class IndexView(CheckoutSessionMixin, generic.FormView):
 from easy_pdf.views import PDFTemplateView
 
 
-class HelloPDFView(PDFTemplateView):
+class PDFView(PDFTemplateView):
     template_name = "quotation/quote_pdf.html"
 
 
@@ -125,28 +125,3 @@ class RequestQuoteView(generic.TemplateView):
 class QuoteListView(generic.ListView):
     # Return a list of all of this user's frozen baskets...?
     pass
-
-
-
-# class ChangePasswordView(PageTitleMixin, generic.FormView):
-#     form_class = PasswordChangeForm
-#     template_name = 'customer/profile/change_password_form.html'
-#     communication_type_code = 'PASSWORD_CHANGED'
-#     page_title = _('Change Password')
-#     active_tab = 'profile'
-#     success_url = reverse_lazy('customer:profile-view')
-#
-#     def form_valid(self, form):
-#         form.save()
-#         messages.success(self.request, _("Password updated"))
-#
-#         ctx = {
-#             'user': self.request.user,
-#             'site': get_current_site(self.request),
-#             'reset_url': get_password_reset_url(self.request.user),
-#         }
-#         msgs = CommunicationEventType.objects.get_and_render(
-#             code=self.communication_type_code, context=ctx)
-#         Dispatcher().dispatch_user_messages(self.request.user, msgs)
-#
-#         return redirect(self.get_success_url())

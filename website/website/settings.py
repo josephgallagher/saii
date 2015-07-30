@@ -62,7 +62,7 @@ INSTALLED_APPS = [
     'website.apps.quotation',
     'easy_pdf',
     # 'paypal',
-] + get_core_apps(['website.apps.checkout'])
+] + get_core_apps(['website.apps.checkout', 'website.apps.payment'])
 
 SITE_ID = 1
 
@@ -94,7 +94,6 @@ TEMPLATE_LOADERS = (
 )
 
 location = lambda x: os.path.join(os.path.dirname(os.path.realpath(__file__)), '', x)
-# print location('templates')
 
 TEMPLATES = [
     {
