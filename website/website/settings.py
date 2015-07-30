@@ -65,12 +65,14 @@ INSTALLED_APPS = [
     'datacash',
     'website.apps.quotation',
     'easy_pdf',
+    'corsheaders'
     # 'paypal',
 ] + get_core_apps(['website.apps.checkout', 'website.apps.payment'])
 
 SITE_ID = 1
 
 MIDDLEWARE_CLASSES = (
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -286,3 +288,11 @@ MEDIA_URL = '/media/'
 
 MEDIA_ROOT = "../public/media"
 STATIC_ROOT = "../public/static"
+
+#Cross origin stuff
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8000',
+    'localhost/',
+)
+
+CORS_ORIGIN_ALLOW_ALL = True
