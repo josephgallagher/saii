@@ -27,7 +27,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0r&z-dj2z6qz4(bm-=w!3^+_!$9yd!)^mtxn3_w@b#tymml1l)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = TEMPLATE_DEBUG = True
+THUMBNAIL_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
@@ -305,10 +306,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
-OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+print MEDIA_ROOT
+
+
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
 
 #Cross origin stuff
 CORS_ORIGIN_WHITELIST = (
