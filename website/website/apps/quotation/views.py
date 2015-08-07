@@ -7,9 +7,9 @@ from django.utils.http import urlquote
 from django.contrib.auth import login
 from django.shortcuts import redirect
 from django.shortcuts import render_to_response
+from django.utils.translation import ugettext_lazy as _
+
 from oscar.apps.order import models
-
-
 from oscar.core.loading import get_class, get_model, get_classes
 from oscar.apps.checkout.mixins import CheckoutSessionMixin
 from oscar.apps.checkout import signals
@@ -79,7 +79,8 @@ class IndexView(CheckoutSessionMixin, generic.FormView):
                       "back to the checkout process"))
                 self.success_url = "%s?next=%s&email=%s" % (
                     reverse('customer:register'),
-                    reverse('checkout:shipping-address'),
+                    # reverse('checkout:shipping-address'),
+                    reverse('quotation:request-quote'),
                     urlquote(email)
                 )
         else:

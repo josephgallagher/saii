@@ -27,9 +27,10 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = '0r&z-dj2z6qz4(bm-=w!3^+_!$9yd!)^mtxn3_w@b#tymml1l)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
+DEBUG = TEMPLATE_DEBUG = True
+THUMBNAIL_DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['*']
 
 OSCAR_SHOP_NAME = 'SA Instruments, Inc.'
 OSCAR_DEFAULT_CURRENCY = 'USD'
@@ -65,12 +66,15 @@ INSTALLED_APPS = [
     'datacash',
     'website.apps.quotation',
     'easy_pdf',
+    'corsheaders',
     # 'paypal',
 ] + get_core_apps(['website.apps.checkout', 'website.apps.payment'])
+
 
 SITE_ID = 1
 
 MIDDLEWARE_CLASSES = (
+    'corsheaders.middleware.CorsMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -124,6 +128,19 @@ TEMPLATES = [
     },
 ]
 
+
+TEMPLATE_CONTEXT_PROCESSORS = (
+    "django.contrib.auth.context_processors.auth",
+    "django.core.context_processors.request",
+    "django.core.context_processors.debug",
+    "django.core.context_processors.i18n",
+    "django.core.context_processors.media",
+    "django.core.context_processors.static",
+    "django.core.context_processors.tz",
+    "django.contrib.messages.context_processors.messages",
+)
+
+
 WSGI_APPLICATION = 'website.wsgi.application'
 
 
@@ -147,6 +164,12 @@ HAYSTACK_CONNECTIONS = {
         'ENGINE': 'haystack.backends.simple_backend.SimpleEngine',
     },
 }
+
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
+)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to
@@ -284,5 +307,17 @@ USE_TZ = True
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 
-MEDIA_ROOT = "../public/media"
-STATIC_ROOT = "../public/static"
+MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+
+
+STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
+
+#Cross origin stuff
+CORS_ORIGIN_WHITELIST = (
+    'localhost:8000',
+    'localhost/',
+)
+
+CORS_ORIGIN_ALLOW_ALL = True
