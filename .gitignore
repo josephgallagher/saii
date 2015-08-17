@@ -2,4 +2,4 @@ public
 website/db.sqlite3
 .idea
 *.pyc
-website/settings_local.py
+website/website/settings_local.py
