@@ -89,6 +89,7 @@ MIDDLEWARE_CLASSES = (
 
 # EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
 OSCAR_FROM_EMAIL = 'joseph@josephdgallagher.com'
+DEFAULT_FROM_EMAIL = "joseph@josephdgallagher.com"
 EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
 EMAIL_HOST = 'smtp.zoho.com'
 EMAIL_PORT = 587
