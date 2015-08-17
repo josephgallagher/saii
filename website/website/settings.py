@@ -23,8 +23,6 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.8/howto/deployment/checklist/
 
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '0r&z-dj2z6qz4(bm-=w!3^+_!$9yd!)^mtxn3_w@b#tymml1l)'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = TEMPLATE_DEBUG = True
@@ -35,18 +33,6 @@ ALLOWED_HOSTS = ['*']
 OSCAR_SHOP_NAME = 'SAII TEST'
 OSCAR_DEFAULT_CURRENCY = 'USD'
 
-STRIPE_SECRET_KEY = "sk_test_AwJVJOGHQEbQujjfL5NRQqGg"
-STRIPE_PUBLISHABLE_KEY = "pk_test_2iglUrpb6YKX2uzV46WLoBnM"
-STRIPE_CURRENCY = "USD"
-
-DATACASH_HOST = 'testserver.datacash.com'
-DATACASH_CLIENT = '...'
-DATACASH_PASSWORD = '...'
-DATACASH_CURRENCY = 'USD'
-
-# PAYPAL_API_USERNAME = 'uhhhmmm-facilitator_api1.gmail.com'
-# PAYPAL_API_PASSWORD = 'VWJHPBEBR8Z34RCT'
-# PAYPAL_API_SIGNATURE = 'AFcWxV21C7fd0v3bYYYRCpSSRl31ArxgHzKe2jfF6SSUgastSMhqTeJL'
 
 # Application definition
 
@@ -87,15 +73,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 )
 
-# EMAIL_BACKEND = 'django.core.mail.backends.console.EmailBackend'
-OSCAR_FROM_EMAIL = 'joseph@josephdgallagher.com'
-DEFAULT_FROM_EMAIL = "joseph@josephdgallagher.com"
-EMAIL_BACKEND = 'django.core.mail.backends.smtp.EmailBackend'
-EMAIL_HOST = 'smtp.zoho.com'
-EMAIL_PORT = 587
-EMAIL_USE_TLS = True
-EMAIL_HOST_USER = OSCAR_FROM_EMAIL
-EMAIL_HOST_PASSWORD = "joseph#^#"
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.EmailBackend',
@@ -155,17 +132,6 @@ WSGI_APPLICATION = 'website.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/1.8/ref/settings/#databases
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': 'db.sqlite3',
-        'USER': '',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': '',
-        'ATOMIC_REQUESTS': True,
-    }
-}
 
 HAYSTACK_CONNECTIONS = {
     'default': {
@@ -322,10 +288,17 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
 
-#Cross origin stuff
+# Cross origin stuff
 CORS_ORIGIN_WHITELIST = (
     'localhost:8000',
     'localhost/',
 )
 
 CORS_ORIGIN_ALLOW_ALL = True
+
+
+# Try and import local settings which can be used to override any of the above.
+try:
+    from settings_local import *
+except ImportError:
+    pass
