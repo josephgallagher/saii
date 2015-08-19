@@ -280,11 +280,15 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
+DOCUMENT_URL = '/documents/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media")
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
+
+
+DOCUMENT_ROOT = os.path.join(BASE_DIR, "documents/")
 
 OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
 
