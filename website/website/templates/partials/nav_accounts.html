@@ -54,6 +54,16 @@
                     <li><a id="login_link" href="{% url 'customer:login' %}"><i class="icon-signin"></i> {% trans "Login or register" %}</a></li>
                 {% endif %}
             </ul>
+
+            <ul class="nav navbar-nav navbar-left">
+                <li><a id="products" href="/products/"><i class="icon-medkit"></i> {% trans "Products" %}</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+                <li><a id="applications" href="/applications/"><i class="icon-compass"></i> {% trans "Applications" %}</a></li>
+            </ul>
+            <ul class="nav navbar-nav navbar-left">
+                <li><a id="support" href="/support/"><i class="icon-globe"></i> {% trans "Tech Support" %}</a></li>
+            </ul>
             <ul class="nav navbar-nav navbar-left">
                 <li><a id="contact" href="/contact/"><i class="icon-mail-reply"></i> {% trans "Contact us" %}</a></li>
             </ul>
