@@ -51,20 +51,22 @@ Hide mini-basket so we don't have two baskets to keep in sync
 
         <div class="row">
             <div class="col-sm-8 col-md-9">
-                <form id="profile_form" class="form-stacked" action={% url 'quotation:pdf-quote' %} method="post">
+                <form method="post" id="place_order_form" action="{% url 'quotation:request-quote' %}" >
                     {% csrf_token %}
+                    <input type="hidden" name="action" value="get_quote" />
+                        <p>{{ basket.total_excl_tax }}{{ basket.currency }}<br>
+                         ID: {{ basket.pk }}<br>
+                         #Items: {{ basket.num_items }}<br>
+                            User: {{ user.email }}<br>
+                        </p>
 
-                    <p>{% trans "Enter an email address to receive the quote for " %}{{ basket.total_excl_tax }} with
-                        ID: {{ basket.pk }}
-                        {{ basket.num_items }}</p>
-
-                    {% include 'oscar/partials/form_fields.html' with style='stacked' %}
+{#                    {% include 'oscar/partials/form_fields.html' with style='stacked' %}#}
+{#                    <div class="form-group">#}
+{#                        <input class="form-control" type="email" id="id_email"#}
+{#                               placeholder="Email address to receive quote"/>#}
+{#                    </div>#}
                     <div class="form-group">
-                        <input class="form-control" type="email" id="id_email"
-                               placeholder="Email address to receive quote"/>
-                    </div>
-                    <div class="form-group">
-                        <button type="submit" class="btn btn-primary btn-lg"
+                        <button id="get-quote" type="submit" class="btn btn-primary btn-lg"
                                 data-loading-text="{% trans 'Sending...' %}">{% trans 'Send Quote' %}</button>
                     </div>
                 </form>
