@@ -11,7 +11,9 @@ Basket = get_model('basket', 'Basket')
 class QuotationAdmin(admin.ModelAdmin):
     model = Basket
     raw_id_fields = ('basket',)
-    fieldsets = [('Quotation', {'fields': ['user', 'basket', 'date_placed']})]
+    fieldsets = [
+        ('Quotation', {'fields': ['user', 'number', 'basket', 'currency', 'total', 'date_placed']})
+    ]
 
 
     # readonly_fields = ('basket', 'owner')

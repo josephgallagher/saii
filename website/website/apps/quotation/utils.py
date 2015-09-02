@@ -27,7 +27,7 @@ class QuotationNumberGenerator(object):
         """
         Return an quotation number for a given basket
         """
-        return 999000 + basket.id
+        return 900000 + basket.id
 
 
 class QuotationCreator(object):
@@ -98,12 +98,13 @@ class QuotationCreator(object):
                                shipping_method, shipping_charge, billing_address,
                                total, quotation_number, status, **extra_quotation_fields):
         """
-        Create an quotation model.
+        Create a quotation model.
         """
         quotation_data = {'basket': basket,
-                          # 'number': quotation_number,
+                          'number': quotation_number,
                           # 'site': Site._default_manager.get_current(),
-                          # 'currency': total.currency,
+                          'currency': total.currency,
+                          'total': total.excl_tax,
                           # 'total_incl_tax': total.incl_tax,
                           # 'total_excl_tax': total.excl_tax,
                           # 'shipping_incl_tax': shipping_charge.incl_tax,

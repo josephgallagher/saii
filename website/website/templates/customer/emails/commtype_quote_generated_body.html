@@ -10,7 +10,7 @@ will be processed shortly.{% endblocktrans %}</p>
 
 <ul>
     {% for line in quotation.basket.lines.all %}
-    <li>{{ line.title }} - {%  trans 'quantity:' %} {{ line.quantity }} - {% trans 'price:' %} {{ line.line_price_incl_tax|currency:quotation.basket.currency }}</li>
+    <li>{{ line.product }} - {%  trans 'quantity:' %} {{ line.quantity }} - {% trans 'price:' %} {{ line.line_price_incl_tax|currency:quotation.basket.currency }}</li>
     {% endfor %}
 </ul>
 <p>

@@ -1,0 +1,154 @@
+{% extends "customer/baseaccountpage.html" %}
+{% load currency_filters %}
+{% load display_tags %}
+{% load i18n %}
+{% load reviews_tags %}
+
+{% block extra_breadcrumbs %}
+    <li>
+        <a href="{% url 'customer:quotation-list' %}">{% trans 'Quotation history' %}</a>
+    </li>
+{% endblock %}
+
+{% block tabcontent %}
+    <table class="table table-striped table-bordered">
+        <thead>
+            <tr>
+                <th>{% trans 'Product' %}</th>
+{#                <th>{% trans 'Dispatch date' %}</th>#}
+                <th>{% trans 'Qty' %}</th>
+                <th>{% trans 'Line price' %}</th>
+{#                <th>{% trans 'Line price excl. tax' %}</th>#}
+{#                <th>{% trans 'Line price incl. tax' %}</th>#}
+            </tr>
+        </thead>
+        <tbody>
+            {% for line in quotation.basket.lines.all %}
+                {% with product=line.product %}
+                    <tr>
+                        <td>{{ line.description }}</td>
+{#                        <td>{{ line.est_dispatch_date|default:"-" }}</td>#}
+                        <td>{{ line.quantity }}</td>
+                        <td>{{ line.price_excl_tax|currency:quotation.basket.currency }}</td>
+{#                        <td>{{ line.line_price_before_discounts_excl_tax|currency:quotation.basket.currency }}</td>#}
+{#                        <td>{{ line.line_price_before_discounts_incl_tax|currency:quotation.basket.currency }}</td>#}
+{#                        <td width="90">#}
+{#                            {% if product %}#}
+{#                                <form id="line_form_{{ line.id }}" action="{% url 'customer:quotation-line' order_number=order.number line_id=line.id %}" method="POST">#}
+{#                                    {% csrf_token %}#}
+{#                                    <input type="hidden" name="action" value="reorder" />#}
+{#                                    <button id="reorder_line_{{ line.id }}" class="btn btn-success" type="submit" data-loading-text="{% trans 'Re-ordering...' %}">{% trans 'Re-order' %}</button>#}
+{#                                </form>#}
+{#                            {% else %}#}
+{#                                {% trans 'Not available anymore' %}#}
+{#                            {% endif %}#}
+{#                        </td>#}
+                    </tr>
+                {% endwith %}
+            {% endfor %}
+
+{#            {% with discounts=order.basket_discounts %}#}
+{#                {% block discount_totals %}#}
+{#                    {% if discounts %}#}
+{#                        <tr>#}
+{#                            <td colspan="2">{% trans "Basket total (excl. discounts)" %}</td>#}
+{#                            <td colspan="2">{{ order.basket_total_before_discounts_incl_tax|currency:order.currency }}</td>#}
+{#                        </tr>#}
+{#                        {% for discount in discounts %}#}
+{#                        <tr>#}
+{#                            <td colspan="4">#}
+{#                                <span class="label label-success">{% trans "Discount" %}</span>#}
+{#                                {{ discount.offer_name }}#}
+{#                            </td>#}
+{#                            <td colspan="2">- {{ discount.amount|currency:order.currency }}</td>#}
+{#                        </tr>#}
+{#                        {% endfor %}#}
+{#                    {% endif %}#}
+{#                {% endblock discount_totals %}#}
+
+{#                {% block basket_total %}#}
+{#                    {% if discounts %}#}
+{#                        <tr>#}
+{#                            <th colspan="2">{% trans "Basket total (inc. discounts)" %}</th>#}
+{#                            <td colspan="2">{{ quotation.total|currency:quotation.currency }}</td>#}
+{#                        </tr>#}
+{#                    {% else %}#}
+{#                        <tr>#}
+{#                            <th colspan="2">{% trans "Basket total" %}</th>#}
+{#                            <td colspan="2">{{ quotation.total|currency:quotation.currency }}</td>#}
+{#                        </tr>#}
+{#                    {% endif %}#}
+{#                {% endblock basket_total %}#}
+{#            {% endwith %}#}
+
+            {% block shipping_totals %}
+                {% if order.has_shipping_discounts %}
+                    <tr>
+                        <td colspan="2">{% trans "Shipping total (excl. discounts)" %}</td>
+                        <td colspan="2">{{ order.shipping_before_discounts_incl_tax|currency:order.currency }}</td>
+                    </tr>
+                    {% for discount in order.shipping_discounts %}
+                    <tr>
+                        <td colspan="4">
+                            <span class="label label-success">{% trans "Discount" %}</span>
+                            {{ discount.offer_name }}
+                        </td>
+                        <td colspan="2">- {{ discount.amount|currency:order.currency }}</td>
+                    </tr>
+                    {% endfor %}
+                    <tr>
+                        <th colspan="4">{% trans "Shipping total (inc. discounts)" %}</th>
+                        <td colspan="2">{{ order.shipping_incl_tax|currency:order.currency }}</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <th colspan="2">{% trans "Shipping total" %}</th>
+                        <td colspan="2">{{ quotation.shipping_incl_tax|currency:quotation.currency }}</td>
+                    </tr>
+                {% endif %}
+            {% endblock %}
+
+            {% block order_total %}
+                <tr>
+                    <th colspan="2">{% trans 'Quote total' %}</th>
+                    <td colspan="2">{{ quotation.total|currency:quotation.currency }}</td>
+                </tr>
+            {% endblock order_total %}
+        </tbody>
+    </table>
+
+    {% block quotation_actions %}
+        <form id="order_form_{{ quotation.id }}" action="{% url 'customer:quotation' number=quotation.number %}" method="post">
+            {% csrf_token %}
+            <input type="hidden" name="quotation_id" value="{{ quotation.id }}" />
+            <input type="hidden" name="action" value="reorder" />
+            <button type="submit" class="btn btn-success" data-loading-text="{% trans 'Proceeding to checkout...' %}">{% trans 'Order this quote' %}</button>
+        </form>
+    {% endblock quotation_actions %}
+
+    <hr>
+
+    <h2>{% trans 'Shipping Method' %}</h2>
+    <p>{{ order.shipping_method }}</p>
+
+    <hr>
+
+    <h2>{% trans 'Shipping Address' %}</h2>
+
+    <table class="table table-striped table-bordered">
+        <tr>
+            <th>{% trans 'Address' %}</th>
+            <th>{% trans 'Contact Number' %}</th>
+            <th>{% trans 'Shipping Notes' %}</th>
+        </tr>
+        <tr>
+            <td>
+                    {% for field in order.shipping_address.active_address_fields %}
+                        {{ field }}<br/>
+                    {% endfor %}
+            </td>
+            <td>{{ order.shipping_address.phone_number|default:"-" }}</td>
+            <td>{{ order.shipping_address.notes|linebreaks }}</td>
+        </tr>
+    </table>
+{% endblock tabcontent %}

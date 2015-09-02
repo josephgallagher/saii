@@ -9,10 +9,15 @@ from django.utils.timezone import now
 
 
 class Quotation(models.Model):
+    number = models.CharField(_("Quotation number"), max_length=128, db_index=True, unique=True)
     basket = models.OneToOneField('basket.Basket', verbose_name=_("Basket"), related_name='basket')
     user = models.ForeignKey(AUTH_USER_MODEL, related_name='quotations', null=True, verbose_name=_("User"))
     guest_email = models.EmailField(_("Guest email address"), max_length=75, blank=True)
     date_placed = models.DateTimeField(db_index=True)
+    currency = models.CharField(
+        _("Currency"), max_length=12, default=get_default_currency)
+    total = models.DecimalField(
+        _("Order total"), decimal_places=2, max_digits=12, null=True)
 
     def __unicode__(self):
         return "Quote: %d, User: %s" % (self.basket_id, self.user)

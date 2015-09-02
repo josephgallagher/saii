@@ -259,7 +259,7 @@ class RequestQuoteView(QuotationPlacementMixin, generic.TemplateView):
         #     return self.render_preview(
         #         self.request, error=error_msg, **payment_kwargs)
 
-        signals.post_payment.send_robust(sender=self, view=self)
+        # signals.post_payment.send_robust(sender=self, view=self)
 
         # Try and place quote request
         try:
@@ -323,8 +323,3 @@ class ThankYouView(generic.DetailView):
                 raise http.Http404(_("No order found"))
 
         return quotation
-
-
-class QuoteListView(generic.ListView):
-    # Return a list of all of this user's frozen baskets...?
-    pass
