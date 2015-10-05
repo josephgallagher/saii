@@ -32,6 +32,7 @@ ALLOWED_HOSTS = ['*']
 
 OSCAR_SHOP_NAME = 'SAII'
 OSCAR_DEFAULT_CURRENCY = 'USD'
+OSCAR_HIDDEN_FEATURES = ['reviews', 'wishlists']
 
 
 # Application definition

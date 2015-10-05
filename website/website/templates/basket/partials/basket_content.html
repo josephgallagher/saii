@@ -1,6 +1,29 @@
 {% extends 'oscar/basket/partials/basket_content.html' %}
 {% load i18n %}
 
+{% if not basket.is_empty %}
+    <div class="row">
+        {% block vouchers %}
+            {# Hide the entire section if a custom BasketView doesn't pass in a voucher form #}
+{#            {% if voucher_form %}#}
+{#                <div class="col-sm-6">#}
+{#                    <div class="sub-header">#}
+{#                        <h2>{% trans "Voucher/promo code" %}</h2>#}
+{#                    </div>#}
+{#                    <p id="voucher_form_link"><a href="#voucher" class="btn btn-default btn-full">{% trans "I have a voucher code..." %}</a></p>#}
+{##}
+{#                    <div id="voucher_form_container" style="display:none">#}
+{#                        <form id="voucher_form" action="{% url 'basket:vouchers-add' %}" method="post">#}
+{#                            {% csrf_token %}#}
+{#                            {% include "partials/form_fields.html" with form=voucher_form %}#}
+{#                            <button type="submit" class="btn btn-info" data-loading-text="{% trans 'Adding...' %}">{% trans "Add voucher" %}</button>#}
+{#                            {% trans "or" %} <a href="#" id="voucher_form_cancel">{% trans "cancel" %}</a>#}
+{#                        </form>#}
+{#                    </div>#}
+{#                </div>#}
+{#            {% endif %}#}
+        {% endblock vouchers %}
+{% endif %}
 
 {% block formactions %}
     <div class="form-group clearfix">
