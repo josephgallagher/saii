@@ -302,6 +302,22 @@ CORS_ORIGIN_WHITELIST = (
 CORS_ORIGIN_ALLOW_ALL = True
 
 
+USE_LESS = False
+COMPRESS_ENABLED = True
+
+
+COMPRESS_PRECOMPILERS = (
+    ('text/less', 'lessc {infile} {outfile}'),
+)
+
+
+COMPRESS_OFFLINE_CONTEXT = {
+    # this is the only default value from compressor itself
+    'STATIC_URL': STATIC_URL,
+    'use_less': USE_LESS,
+}
+
+
 # Try and import local settings which can be used to override any of the above.
 try:
     from settings_local import *

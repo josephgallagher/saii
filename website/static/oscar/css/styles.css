@@ -8594,9 +8594,11 @@ body {
 /*Added by me*/
 #default > header > div.page_inner > div {
     background-image: url("../../../media/header.jpg");
+    background-size: contain;
     background-position: center;
     background-repeat: no-repeat;
-    height: 200px;
+    height: 175px;
+    width: auto;
 }
 
 .page_inner {
