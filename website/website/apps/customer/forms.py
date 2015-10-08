@@ -132,6 +132,7 @@ class ConfirmPasswordForm(forms.Form):
 
 class EmailUserCreationForm(forms.ModelForm):
     email = forms.EmailField(label=_('Email address'))
+    facility = forms.CharField(label=_('Facility'))
     serial = forms.IntegerField(
         label=_('Serial Number'), widget=forms.NumberInput, min_value=2000000,
         max_value=2220000, help_text="From Control/Gating module")
