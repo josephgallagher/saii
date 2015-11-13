@@ -54,13 +54,14 @@ Hide mini-basket so we don't have two baskets to keep in sync
                 <form method="post" id="place_order_form" action="{% url 'quotation:request-quote' %}" >
                     {% csrf_token %}
                     <input type="hidden" name="action" value="get_quote" />
-                        <p>{{ basket.total_excl_tax }}{{ basket.currency }}<br>
-                         ID: {{ basket.pk }}<br>
-                         #Items: {{ basket.num_items }}<br>
-                            User: {{ user.email }}<br>
-                        </p>
 
-{#                    {% include 'oscar/partials/form_fields.html' with style='stacked' %}#}
+                    <p>{{ basket.total_excl_tax }}{{ basket.currency }}<br>
+                        ID: {{ basket.pk }}<br>
+                        #Items: {{ basket.num_items }}<br>
+                        User: {{ user.email }}<br>
+                    </p>
+
+                    {#                    {% include 'oscar/partials/form_fields.html' with style='stacked' %}#}
 {#                    <div class="form-group">#}
 {#                        <input class="form-control" type="email" id="id_email"#}
 {#                               placeholder="Email address to receive quote"/>#}

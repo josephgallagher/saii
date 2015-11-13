@@ -2,6 +2,15 @@ __author__ = 'joseph'
 
 import six
 
+import os
+import datetime
+from django.conf import settings
+from django.http import HttpResponse
+
+from django.template.loader import get_template
+from django.template import Context
+from xhtml2pdf import pisa
+
 from django import http
 from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
@@ -84,7 +93,7 @@ class IndexView(QuotationPlacementMixin, generic.FormView):
             # We raise a signal to indicate that the user has entered the
             # checkout process by specifying an email address.
             # signals.start_checkout.send_robust(
-            #     sender=self, request=self.request, email=email)
+            # sender=self, request=self.request, email=email)
 
             if form.is_new_account_checkout():
                 messages.info(
@@ -110,20 +119,84 @@ class IndexView(QuotationPlacementMixin, generic.FormView):
     def get_success_response(self):
         return redirect(self.get_success_url())
 
-
 # ===============
 # Request Quote
 # ===============
 
 
 from easy_pdf.views import PDFTemplateView
+from xhtml2pdf.pdf import pisaPDF
+from easy_pdf import rendering
+# from StringIO import StringIO
+
+from django.template.loader import get_template
+from django.template import Context
+import cStringIO as StringIO
+from cgi import escape
+
+
+# class PDFView(PDFTemplateView):
+# template_name = "quotation/quote_pdf.html"
+# model = get_model('quotation', 'Quotation')
+# query_results = Quotation.objects.all()
+#
+#     def write_pdf(self, basket, template_src, context_dict, filename):
+#         template = get_template(template_src)
+#         main_pdf = pisaPDF()
+#
+#         context = Context(context_dict)
+#         html = template.render(context)
+#         result = open(filename, 'w+b')  # Changed from file to filename
+#         pdf = pisa.pisaDocument(StringIO.StringIO(
+#             html.encode("UTF-8")), result)
+#
+#         if pdf.err:
+#             messages.error(
+#                 self.request,
+#                 _("An problem occured trying to generate the packing slip for "
+#                   "quote #%s") % basket.id,
+#             )
+#         else:
+#             main_pdf.addDocument(pdf)
+#
+#         response = HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
+#         # filename = self.get_packing_slip_filename(orders)
+#         response['Content-Disposition'] = 'attachment; filename=%s' % filename
+#         result.close()
+#
+#         return response
+#
+#
+#     # def get_context_data(self, **kwargs):
+#     #     return super(PDFView, self).get_context_data(
+#     #         pagesize="A4",
+#     #         title="Quote Request",
+#     #         **kwargs
+#     #     )
 
 
 class PDFView(PDFTemplateView):
     template_name = "quotation/quote_pdf.html"
+    model = get_model('quotation', 'Quotation')
+    query_results = Quotation.objects.all()
+
+    def render_to_pdf(self, template_src, context_dict, filename):
+        template = get_template(template_src)
+        context = Context(context_dict)
+        html = template.render(context)
+        result = open(filename, 'w+b')
+        main_pdf = pisaPDF()
+
+        pdf = pisa.pisaDocument(StringIO.StringIO(
+            html.encode("UTF-8")), result)
+        if not pdf.err:
+            main_pdf.addDocument(pdf)
+            return HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
+        return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
 
 
 class RequestQuoteView(QuotationPlacementMixin, generic.TemplateView):
+    model = get_model('quotation', 'Quotation')
     template_name = 'quotation/request_quote.html'
     # model = get_model('basket', 'Line')
     # basket_model = get_model('basket', 'Basket')
@@ -140,7 +213,7 @@ class RequestQuoteView(QuotationPlacementMixin, generic.TemplateView):
         # Posting to payment-details isn't the right thing to do.  Form
         # submissions should use the preview URL.
         # if not self.preview:
-        #     return http.HttpResponseBadRequest()
+        # return http.HttpResponseBadRequest()
 
         # We use a custom parameter to indicate if this is an attempt to place
         # an order (normally from the preview page).  Without this, we assume a
@@ -196,9 +269,9 @@ class RequestQuoteView(QuotationPlacementMixin, generic.TemplateView):
 
         # Taxes must be known at this point
         # assert basket.is_tax_known, (
-        #     "Basket tax must be set before a user can place an order")
+        # "Basket tax must be set before a user can place an order")
         # assert shipping_charge.is_tax_known, (
-        #     "Shipping charge tax must be set before a user can place an order")
+        # "Shipping charge tax must be set before a user can place an order")
 
         # We generate the order number first as this will be used
         # in payment requests (ie before the order model has been
@@ -275,6 +348,12 @@ class RequestQuoteView(QuotationPlacementMixin, generic.TemplateView):
             order_total = Price('USD', order_total, order_total, 0)
             shipping_charge = Price('USD', 0.00, 0.00, 0)
             shipping_method = FixedPrice
+
+            template_src = "quotation/quote_pdf.html"
+            pdf = PDFView()
+            PDFView.render_to_pdf(pdf, template_src, {"title": "Quote Request", 'basket': basket, 'user': user,
+                                                      'address': shipping_address},
+                                  "media/quote" + str(basket.id) + ".pdf")
 
             return self.handle_quotation_placement(
                 quotation_number, user, basket, shipping_address, shipping_method,

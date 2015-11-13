@@ -232,6 +232,7 @@ class QuotationPlacementMixin(CheckoutSessionMixin):
         if messages and messages['body']:
             logger.info("Quote #%s - sending %s messages", quotation.id, code)
             dispatcher = Dispatcher(logger)
+            kwargs["quotation_id"] = quotation.basket_id
             dispatcher.dispatch_quotation_messages(quotation, messages,
                                                event_type, **kwargs)
         else:

@@ -1,11 +1,12 @@
 __author__ = 'joseph'
 import logging
+import os
 
 from django.conf import settings
 from django.core.mail import EmailMessage, EmailMultiAlternatives
 
 
-from oscar.apps.customer.utils import Dispatcher as CoreDispatcher # noqa
+from oscar.apps.customer.utils import Dispatcher as CoreDispatcher  # noqa
 from oscar.core.loading import get_model
 
 
@@ -37,24 +38,24 @@ class QuoteDispatcher(CoreDispatcher):
             else:
                 return
         else:
-            self.dispatch_user_messages(quotation.user, messages)
+            self.dispatch_user_messages(quotation.user, messages, **kwargs)
 
         if event_type == 'QUOTE_GENERATED':
             CommunicationEvent._default_manager.create(
                 quotation=quotation, event_type=event_type)
 
-    def dispatch_user_messages(self, user, messages):
+    def dispatch_user_messages(self, user, messages, **kwargs):
         """
         Send messages to a site user
         """
         if messages['subject'] and (messages['body'] or messages['html']):
-            self.send_user_email_messages(user, messages)
+            self.send_user_email_messages(user, messages, **kwargs)
         if messages['sms']:
             self.send_text_message(user, messages['sms'])
 
     # Internal
 
-    def send_user_email_messages(self, user, messages):
+    def send_user_email_messages(self, user, messages, **kwargs):
         """
         Sends message to the registered user / customer and collects data in
         database
@@ -64,7 +65,7 @@ class QuoteDispatcher(CoreDispatcher):
                                 " no email address", user.id)
             return
 
-        email = self.send_email_messages(user.email, messages)
+        email = self.send_email_messages(user.email, messages, **kwargs)
 
         # Is user is signed in, record the event for audit
         if email and user.is_authenticated():
@@ -73,7 +74,7 @@ class QuoteDispatcher(CoreDispatcher):
                                           body_text=email.body,
                                           body_html=messages['html'])
 
-    def send_email_messages(self, recipient, messages):
+    def send_email_messages(self, recipient, messages, **kwargs):
         """
         Plain email sending to the specified recipient
         """
@@ -88,6 +89,10 @@ class QuoteDispatcher(CoreDispatcher):
                                            messages['body'],
                                            from_email=from_email,
                                            to=[recipient])
+            # Generate and attach quotation pdf
+            quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(kwargs["quotation_id"]) + ".pdf")
+            attachment = open(quote_pdf, 'rb')
+            email.attach(quote_pdf, attachment.read(), 'application/pdf')
             email.attach_alternative(messages['html'], "text/html")
         else:
             email = EmailMessage(messages['subject'],
