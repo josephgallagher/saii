@@ -132,6 +132,7 @@ class ConfirmPasswordForm(forms.Form):
 
 class EmailUserCreationForm(forms.ModelForm):
     email = forms.EmailField(label=_('Email address'))
+    name = forms.CharField(label=_('Name'))
     facility = forms.CharField(label=_('Facility'))
     serial = forms.IntegerField(
         label=_('Serial Number'), widget=forms.NumberInput, min_value=2000000,
