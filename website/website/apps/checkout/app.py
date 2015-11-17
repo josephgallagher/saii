@@ -32,6 +32,8 @@ class CheckoutApplication(Application):
     shipping_method_view = get_class('checkout.views', 'ShippingMethodView')
     payment_method_view = get_class('checkout.views', 'PaymentMethodView')
     payment_details_view = get_class('checkout.views', 'PaymentDetailsView')
+    pdf_view = get_class('quotation.views', 'PDFView')
+
     thankyou_view = get_class('checkout.views', 'ThankYouView')
 
     def get_urls(self):
@@ -61,6 +63,9 @@ class CheckoutApplication(Application):
                 self.payment_method_view.as_view(), name='payment-method'),
             url(r'payment-details/$',
                 self.payment_details_view.as_view(), name='payment-details'),
+
+            # PDF views
+            url(r'quote/$', self.pdf_view.as_view(), name='pdf-quote'),
 
             # Preview and thankyou
             url(r'preview/$',

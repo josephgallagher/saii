@@ -9,7 +9,7 @@ from django.core.exceptions import ObjectDoesNotExist
 from oscar.core.loading import get_class, get_model
 
 QuotationCreator = get_class('quotation.utils', 'QuotationCreator')
-Dispatcher = get_class('customer.utils', 'QuoteDispatcher')
+Dispatcher = get_class('customer.utils', 'Dispatcher')
 CheckoutSessionMixin = get_class('checkout.session', 'CheckoutSessionMixin')
 ShippingAddress = get_model('order', 'ShippingAddress')
 QuotationNumberGenerator = get_class('quotation.utils', 'QuotationNumberGenerator')
