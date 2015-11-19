@@ -283,7 +283,7 @@ STATIC_URL = '/static/'
 MEDIA_URL = '/media/'
 DOCUMENT_URL = '/documents/'
 
-MEDIA_ROOT = os.path.join(BASE_DIR, "media")
+MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
 
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
@@ -291,7 +291,7 @@ STATIC_ROOT = os.path.join(BASE_DIR, "static/")
 
 DOCUMENT_ROOT = os.path.join(BASE_DIR, "documents/")
 
-OSCAR_MISSING_IMAGE_URL = MEDIA_URL + 'image_not_found.jpg'
+OSCAR_MISSING_IMAGE_URL = MEDIA_ROOT + 'image_not_found.jpg'
 
 # Cross origin stuff
 CORS_ORIGIN_WHITELIST = (
