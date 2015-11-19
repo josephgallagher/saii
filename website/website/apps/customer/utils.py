@@ -43,25 +43,26 @@ class Dispatcher(object):
             else:
                 return
         else:
-            self.dispatch_user_messages(order.user, messages, event_type, **kwargs)
+            self.dispatch_user_messages(order.user, messages, **kwargs)
 
         # Create order communications event for audit
-        if event_type is not None:
+        # if event_type is not None:
+        if event_type == 'ORDER_PLACED':
             CommunicationEvent._default_manager.create(
                 order=order, event_type=event_type)
 
-    def dispatch_user_messages(self, user, messages, event_type=None, **kwargs):
+    def dispatch_user_messages(self, user, messages, **kwargs):
         """
         Send messages to a site user
         """
         if messages['subject'] and (messages['body'] or messages['html']):
-            self.send_user_email_messages(user, messages, event_type, **kwargs)
+            self.send_user_email_messages(user, messages, **kwargs)
         if messages['sms']:
             self.send_text_message(user, messages['sms'])
 
     # Internal
 
-    def send_user_email_messages(self, user, messages, event_type=None, **kwargs):
+    def send_user_email_messages(self, user, messages, **kwargs):
         """
         Sends message to the registered user / customer and collects data in
         database
@@ -71,7 +72,7 @@ class Dispatcher(object):
                                 " no email address", user.id)
             return
 
-        email = self.send_email_messages(user.email, messages, event_type, **kwargs)
+        email = self.send_email_messages(user.email, messages, **kwargs)
 
         # Is user is signed in, record the event for audit
         if email and user.is_authenticated():
@@ -80,7 +81,7 @@ class Dispatcher(object):
                                           body_text=email.body,
                                           body_html=messages['html'])
 
-    def send_email_messages(self, recipient, messages, event_type=None, **kwargs):
+    def send_email_messages(self, recipient, messages, **kwargs):
         """
         Plain email sending to the specified recipient
         """
@@ -97,11 +98,10 @@ class Dispatcher(object):
                                            to=[recipient])
 
             # Generate and attach quotation pdf
-            if event_type == "ORDER_PLACED":
-                quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(kwargs["quotation_id"]) + ".pdf")
-                attachment = open(quote_pdf, 'rb')
-                email.attach(quote_pdf, attachment.read(), 'application/pdf')
-                email.attach_alternative(messages['html'], "text/html")
+            quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(kwargs["quotation_id"]) + ".pdf")
+            attachment = open(quote_pdf, 'rb')
+            email.attach(quote_pdf, attachment.read(), 'application/pdf')
+            email.attach_alternative(messages['html'], "text/html")
         else:
             email = EmailMessage(messages['subject'],
                                  messages['body'],
