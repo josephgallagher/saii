@@ -148,20 +148,22 @@ class PDFView(PDFTemplateView):
         try:
             pdf = pisa.pisaDocument(StringIO.StringIO(
                 html.encode("UTF-8")), result)
+            quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(quotation_id) + ".pdf")
+
+            if not pdf.err:
+                # main_pdf.addDocument(pdf)
+                # return HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
+                response = HttpResponse(result.getvalue(), content_type='application/pdf')
+                response['Content-Disposition'] = 'filename="%s"' % filename
+                email = EmailMessage('Thanks for your quotation', 'Quotation Attached', 'quotes@i4saquotes.com', [user.email])
+                email.attach(quote_pdf, result.getvalue(), 'application/pdf')
+                email.send()
+                return HttpResponse(response)
+
         except socket_error as serr:
             if serr.errno != errno.ECONNREFUSED:
                 raise serr
-        quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(quotation_id) + ".pdf")
 
-        if not pdf.err:
-            # main_pdf.addDocument(pdf)
-            # return HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
-            response = HttpResponse(result.getvalue(), content_type='application/pdf')
-            response['Content-Disposition'] = 'filename="%s"' % filename
-            email = EmailMessage('Thanks for your quotation', 'Quotation Attached', 'quotes@i4saquotes.com', [user.email])
-            email.attach(quote_pdf, result.getvalue(), 'application/pdf')
-            email.send()
-            return HttpResponse(response)
         return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
 
 # ================
