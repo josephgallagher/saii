@@ -129,6 +129,8 @@ class PaymentMethodView(CorePaymentDetailsView):
 # ==============
 # PDF
 # ==============
+import errno
+from socket import error as socket_error
 
 class PDFView(PDFTemplateView):
     template_name = "quotation/quote_pdf.html"
@@ -143,8 +145,12 @@ class PDFView(PDFTemplateView):
         user = context_dict['user']
         quotation_id = context_dict['basket'].id
 
-        pdf = pisa.pisaDocument(StringIO.StringIO(
-            html.encode("UTF-8")), result)
+        try:
+            pdf = pisa.pisaDocument(StringIO.StringIO(
+                html.encode("UTF-8")), result)
+        except socket_error as serr:
+            if serr.errno != errno.ECONNREFUSED:
+                raise serr
         quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(quotation_id) + ".pdf")
 
         if not pdf.err:
