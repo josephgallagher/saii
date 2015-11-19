@@ -21,7 +21,7 @@ Uncomment this entire first section to bring the payment view back in
 # class PaymentDetailsView(CorePaymentDetailsView):
 #
 # @method_decorator(csrf_exempt)
-#     def dispatch(self, request, *args, **kwargs):
+# def dispatch(self, request, *args, **kwargs):
 #         return super(PaymentDetailsView, self).dispatch(request, *args, **kwargs)
 #
 #     def get_context_data(self, **kwargs):
@@ -134,11 +134,13 @@ class PDFView(PDFTemplateView):
         template = get_template(template_src)
         context = Context(context_dict)
         html = template.render(context)
-        result = open(filename, 'w+b')
+        # result = open(filename, 'w+b')
+        result = StringIO.StringIO()
         main_pdf = pisaPDF()
 
-        pdf = pisa.pisaDocument(StringIO.StringIO(
-            html.encode("UTF-8")), result)
+        # pdf = pisa.pisaDocument(StringIO.StringIO(
+        #     html.encode("UTF-8")), result)
+        pdf = pisa.pisaDocument(StringIO.StringIO(html), dest=result)
         if not pdf.err:
             main_pdf.addDocument(pdf)
             return HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
