@@ -101,6 +101,7 @@ class Dispatcher(object):
                 quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(kwargs["quotation_id"]) + ".pdf")
                 attachment = open(quote_pdf, 'rb')
                 email.attach(quote_pdf, attachment.read(), 'application/pdf')
+                attachment.close()
                 email.attach_alternative(messages['html'], "text/html")
         else:
             email = EmailMessage(messages['subject'],
