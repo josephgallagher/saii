@@ -139,9 +139,9 @@ class PDFView(PDFTemplateView):
 
         pdf = pisa.pisaDocument(StringIO.StringIO(
             html.encode("UTF-8")), result)
-        main_pdf.addDocument(pdf)
 
         if not pdf.err:
+            main_pdf.addDocument(pdf)
             return HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
         return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
 
