@@ -63,14 +63,17 @@ Uncomment this entire first section to bring the payment view back in
 
 
 import logging
+import os
 
 from oscar.apps.checkout.views import PaymentDetailsView as CorePaymentDetailsView
 from oscar.apps.checkout.views import signals
 from oscar.core.loading import get_model, get_classes, get_class
 
+from django.conf import settings
 from django.shortcuts import redirect
 from django.utils import six
 from django.utils.translation import ugettext as _
+from django.core.mail import EmailMessage, EmailMultiAlternatives
 
 from django import http
 
@@ -134,15 +137,25 @@ class PDFView(PDFTemplateView):
         template = get_template(template_src)
         context = Context(context_dict)
         html = template.render(context)
-        result = open(filename, 'w+b')
-        main_pdf = pisaPDF()
+        # result = open(filename, 'w+b')
+        result = StringIO.StringIO()
+        # main_pdf = pisaPDF()
+        user = context_dict['user']
+        quotation_id = context_dict['basket'].id
 
         pdf = pisa.pisaDocument(StringIO.StringIO(
             html.encode("UTF-8")), result)
+        quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(quotation_id) + ".pdf")
 
         if not pdf.err:
-            main_pdf.addDocument(pdf)
-            return HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
+            # main_pdf.addDocument(pdf)
+            # return HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
+            response = HttpResponse(result.getvalue(), content_type='application/pdf')
+            response['Content-Disposition'] = 'filename="%s"' % filename
+            email = EmailMessage('Thanks for your quotation', 'Quotation Attached', 'quotes@i4saquotes.com', [user.email])
+            email.attach(quote_pdf, result.getvalue(), 'application/pdf')
+            email.send()
+            return HttpResponse(response)
         return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
 
 # ================
