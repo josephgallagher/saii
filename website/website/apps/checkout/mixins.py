@@ -34,6 +34,7 @@ class OrderPlacementMixin(CoreOrderPlacementMixin):
         if messages and messages['body']:
             logger.info("Order #%s - sending %s messages", order.number, code)
             kwargs["quotation_id"] = order.basket_id
+            kwargs["code"] = code
             dispatcher = Dispatcher(logger)
             dispatcher.dispatch_order_messages(order, messages,
                                                event_type, **kwargs)

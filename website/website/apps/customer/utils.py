@@ -46,8 +46,7 @@ class Dispatcher(object):
             self.dispatch_user_messages(order.user, messages, **kwargs)
 
         # Create order communications event for audit
-        # if event_type is not None:
-        if event_type == 'ORDER_PLACED':
+        if event_type is not None:
             CommunicationEvent._default_manager.create(
                 order=order, event_type=event_type)
 
@@ -98,10 +97,11 @@ class Dispatcher(object):
                                            to=[recipient])
 
             # Generate and attach quotation pdf
-            quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(kwargs["quotation_id"]) + ".pdf")
-            attachment = open(quote_pdf, 'rb')
-            email.attach(quote_pdf, attachment.read(), 'application/pdf')
-            email.attach_alternative(messages['html'], "text/html")
+            if 'code' in kwargs and kwargs['code'] == "ORDER_PLACED":
+                quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(kwargs["quotation_id"]) + ".pdf")
+                attachment = open(quote_pdf, 'rb')
+                email.attach(quote_pdf, attachment.read(), 'application/pdf')
+                email.attach_alternative(messages['html'], "text/html")
         else:
             email = EmailMessage(messages['subject'],
                                  messages['body'],
