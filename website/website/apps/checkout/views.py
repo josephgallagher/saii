@@ -134,16 +134,20 @@ class PDFView(PDFTemplateView):
         template = get_template(template_src)
         context = Context(context_dict)
         html = template.render(context)
-        # result = open(filename, 'w+b')
-        result = StringIO.StringIO()
+        result = open(filename, 'w+b')
+        # result = StringIO.StringIO()
         main_pdf = pisaPDF()
 
         # pdf = pisa.pisaDocument(StringIO.StringIO(
         #     html.encode("UTF-8")), result)
         pdf = pisa.pisaDocument(StringIO.StringIO(html), dest=result)
+        result.close()
         if not pdf.err:
+            response = HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
+            response['Content-Disposition'] = 'attachment; filename=%s' % filename
             main_pdf.addDocument(pdf)
-            return HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
+            print response['Content-Disposition']
+            return response
         return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
 
 # ================
