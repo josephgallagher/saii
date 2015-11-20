@@ -53,6 +53,7 @@ INSTALLED_APPS = [
     'datacash',
     'website.apps.quotation',
     'easy_pdf',
+    'pdfkit',
     'corsheaders',
     # 'paypal',
 ] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer'])

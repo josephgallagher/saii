@@ -9,11 +9,10 @@ from django.contrib.auth.tokens import default_token_generator
 from django.utils.http import urlsafe_base64_encode
 from django.utils.encoding import force_bytes
 
-from oscar.core.loading import get_model, get_class
+from oscar.core.loading import get_model
 
 CommunicationEvent = get_model('order', 'CommunicationEvent')
 Email = get_model('customer', 'Email')
-PDF = get_class('checkout.views', 'PDFView')
 
 
 class Dispatcher(object):
@@ -98,12 +97,14 @@ class Dispatcher(object):
                                            to=[recipient])
 
             # Generate and attach quotation pdf
-            # if 'code' in kwargs and kwargs['code'] == "ORDER_PLACED":
-            #     quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(kwargs["quotation_id"]) + ".pdf")
-            #     attachment = open(quote_pdf, 'rb')
-            #     email.attach(quote_pdf, attachment.read(), 'application/pdf')
-            #     attachment.close()
-            #     email.attach_alternative(messages['html'], "text/html")
+            if 'code' in kwargs and kwargs['code'] == "ORDER_PLACED":
+                print "HELLO\n"*100
+                filename = os.path.join(settings.BASE_DIR, 'media/quote' + str(kwargs["quotation_id"]) + ".pdf")
+                attachment = open(filename, 'rb')
+                quote_pdf = os.path.basename(filename)
+                email.attach(quote_pdf, attachment.read(), 'application/pdf')
+                attachment.close()
+                email.attach_alternative(messages['html'], "text/html")
         else:
             email = EmailMessage(messages['subject'],
                                  messages['body'],

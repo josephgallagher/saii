@@ -22,9 +22,9 @@ Uncomment this entire first section to bring the payment view back in
 #
 # @method_decorator(csrf_exempt)
 # def dispatch(self, request, *args, **kwargs):
-#         return super(PaymentDetailsView, self).dispatch(request, *args, **kwargs)
+# return super(PaymentDetailsView, self).dispatch(request, *args, **kwargs)
 #
-#     def get_context_data(self, **kwargs):
+# def get_context_data(self, **kwargs):
 #         ctx = super(PaymentDetailsView, self).get_context_data(**kwargs)
 #         if self.preview:
 #             ctx['stripe_token_form'] = forms.StripeTokenForm(self.request.POST)
@@ -64,6 +64,7 @@ Uncomment this entire first section to bring the payment view back in
 
 import logging
 import os
+import pdfkit
 
 from oscar.apps.checkout.views import PaymentDetailsView as CorePaymentDetailsView
 from oscar.apps.checkout.views import signals
@@ -134,28 +135,40 @@ class PDFView(PDFTemplateView):
     template_name = "quotation/quote_pdf.html"
 
     def render_to_pdf(self, template_src, context_dict, filename):
-        template = get_template(template_src)
+        # template = get_template(template_src)
         context = Context(context_dict)
-        html = template.render(context)
-        result = open(filename, 'w+b')
+        # html = template.render(context)
+        # result = open(filename, 'w+b')
         # result = StringIO.StringIO()
         main_pdf = pisaPDF()
         # user = context_dict['user']
         # quotation_id = context_dict['basket'].id
 
-        pdf = pisa.pisaDocument(StringIO.StringIO(
-            html.encode("UTF-8")), result)
+        template = get_template(template_src)
+        html = template.render(context).encode("UTF-8")
+        html_file = open("quote.html", "w")
+        html_file.write(html)
+        html_file.close()
+        try:
+            pdfkit.from_file("quote.html", filename)
+        except IOError as e:
+            return e
+
+        # pdf = pisa.CreatePDF(html_file, file(filename, "w"))
+        # pdf = pisa.pisaDocument(StringIO.StringIO(
+        #    html), result, encoding="UTF-8")
+        # pdf = pisa.CreatePDF(html, dest=result)
         # quote_pdf = os.path.join(settings.BASE_DIR, 'media/quote' + str(quotation_id) + ".pdf")
 
-        if not pdf.err:
-            main_pdf.addDocument(pdf)
-            return HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
-            # response = HttpResponse(result.getvalue(), content_type='application/pdf')
-            # response['Content-Disposition'] = 'filename="%s"' % filename
-            # email = EmailMessage('Thanks for your quotation', 'Quotation Attached', 'quotes@i4saquotes.com', [user.email])
-            # email.attach(quote_pdf, result.getvalue(), 'application/pdf')
-            # email.send()
-            # return HttpResponse(response)
+        # if not pdf.err:
+        # main_pdf.addDocument(pdf)
+        # return HttpResponse(main_pdf.getvalue(), content_type='application/pdf')
+        # response = HttpResponse(result.getvalue(), content_type='application/pdf')
+        # response['Content-Disposition'] = 'filename="%s"' % filename
+        # email = EmailMessage('Thanks for your quotation', 'Quotation Attached', 'quotes@i4saquotes.com', [user.email])
+        # email.attach(quote_pdf, result.getvalue(), 'application/pdf')
+        # email.send()
+        # return HttpResponse(response)
 
         return HttpResponse('We had some errors<pre>%s</pre>' % escape(html))
 
