@@ -16,7 +16,6 @@ Email = get_model('customer', 'Email')
 PDF = get_class('checkout.views', 'PDFView')
 
 
-
 class Dispatcher(object):
     def __init__(self, logger=None):
         if not logger:

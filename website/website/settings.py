@@ -323,3 +323,11 @@ try:
     from settings_local import *
 except ImportError:
     pass
+
+import logging
+
+logging.basicConfig(
+    level=logging.INFO,
+    format='%(asctime)s %(levelname)s %(message)s',
+    filename='/tmp/djangoLog.log', )
+
