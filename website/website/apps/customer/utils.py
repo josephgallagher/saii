@@ -98,7 +98,6 @@ class Dispatcher(object):
 
             # Generate and attach quotation pdf
             if 'code' in kwargs and kwargs['code'] == "ORDER_PLACED":
-                print "HELLO\n"*100
                 filename = os.path.join(settings.BASE_DIR, 'media/quote' + str(kwargs["quotation_id"]) + ".pdf")
                 attachment = open(filename, 'rb')
                 quote_pdf = os.path.basename(filename)
