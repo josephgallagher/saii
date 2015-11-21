@@ -130,7 +130,7 @@ class PaymentMethodView(CorePaymentDetailsView):
 # ==============
 # PDF
 # ==============
-
+import subprocess
 class PDFView(PDFTemplateView):
     template_name = "quotation/quote_pdf.html"
 
@@ -140,7 +140,7 @@ class PDFView(PDFTemplateView):
         # html = template.render(context)
         # result = open(filename, 'w+b')
         # result = StringIO.StringIO()
-        main_pdf = pisaPDF()
+        # main_pdf = pisaPDF()
         # user = context_dict['user']
         # quotation_id = context_dict['basket'].id
 
@@ -150,7 +150,8 @@ class PDFView(PDFTemplateView):
         html_file.write(html)
         html_file.close()
         try:
-            pdfkit.from_file("quote.html", filename)
+            subprocess.call(['xhtml2pdf', "quote.html", filename])
+            # pdfkit.from_file("quote.html", filename)
         except IOError as e:
             return e
 
