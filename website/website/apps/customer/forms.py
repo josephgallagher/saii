@@ -130,13 +130,18 @@ class ConfirmPasswordForm(forms.Form):
         return password
 
 
+def validate_serial(num):
+    if num > 2220000:
+        raise ValidationError('%s is not a valid serial number!' % num)
+
+
 class EmailUserCreationForm(forms.ModelForm):
     email = forms.EmailField(label=_('Email address'))
     name = forms.CharField(label=_('Name'))
     facility = forms.CharField(label=_('Facility'))
-    serial = forms.IntegerField(
-        label=_('Serial Number'), widget=forms.NumberInput, min_value=2000000,
-        max_value=2220000, help_text="From Control/Gating module")
+    serial = forms.IntegerField(error_messages={'required': 'Please enter a valid number.'},
+                                label=_('Serial Number'), widget=forms.NumberInput,
+                                help_text="From Control/Gating module", validators=[validate_serial])
     password1 = forms.CharField(
         label=_('Password'), widget=forms.PasswordInput,
         validators=password_validators)
