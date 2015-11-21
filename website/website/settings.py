@@ -55,6 +55,7 @@ INSTALLED_APPS = [
     'easy_pdf',
     'pdfkit',
     'corsheaders',
+    'stronghold'
     # 'paypal',
 ] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer'])
 
@@ -73,6 +74,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.security.SecurityMiddleware',
     'oscar.apps.basket.middleware.BasketMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
+    'stronghold.middleware.LoginRequiredMiddleware',
 )
 
 
@@ -317,6 +319,11 @@ COMPRESS_OFFLINE_CONTEXT = {
     'STATIC_URL': STATIC_URL,
     'use_less': USE_LESS,
 }
+
+STRONGHOLD_PUBLIC_URLS = (
+    r'^/admin.*?$',  # Don't touch the admin pages
+    r'^/accounts/login/$',  # Avoid redirect loop
+)
 
 
 # Try and import local settings which can be used to override any of the above.
