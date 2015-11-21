@@ -150,7 +150,7 @@ class PDFView(PDFTemplateView):
         html_file.write(html)
         html_file.close()
         try:
-            subprocess.call(['xhtml2pdf', "quote.html", filename])
+            subprocess.call(['weasyprint', "quote.html", filename])
             # pdfkit.from_file("quote.html", filename)
         except IOError as e:
             return e
