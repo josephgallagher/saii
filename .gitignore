@@ -1,5 +1,6 @@
 public
 website/db.sqlite3
+website/quote.html
 .idea
 *.pyc
 website/website/settings_local.py
