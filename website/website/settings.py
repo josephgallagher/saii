@@ -58,7 +58,7 @@ INSTALLED_APPS = [
     'stronghold',
     'weasyprint'
     # 'paypal',
-] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer'])
+] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.shipping'])
 
 
 SITE_ID = 1
