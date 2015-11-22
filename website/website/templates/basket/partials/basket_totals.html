@@ -12,7 +12,7 @@
                 {% block basket_total %}
                         {# No discounts to basket #}
                         <tr>
-                            <th class="total">{% trans "Total (shipping & taxes not applied)" %}</th>
+                            <th class="total">{% trans "Total (tax not applied)" %}</th>
                             <th class="total align-right">
                                 {{ basket.total_excl_tax|currency:basket.currency }}
                             </th>

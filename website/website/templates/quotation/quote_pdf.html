@@ -269,8 +269,15 @@
 
             <table class="bottom-20" style="width:100%">
                 <tr>
+                    <td><strong>Shipping</strong></td>
+                    <td class="text-right"><strong>{{ shipping_charge.incl_tax|currency:basket.currency }}</strong></td>
+                </tr>
+            </table>
+
+            <table class="bottom-20" style="width:100%">
+                <tr>
                     <td><strong>Total</strong></td>
-                    <td class="text-right"><strong>{{ basket.total_excl_tax }}</strong></td>
+                    <td class="text-right"><strong>{{ order_total.incl_tax|currency:basket.currency }}</strong></td>
                 </tr>
             </table>
 

@@ -440,10 +440,11 @@ class PaymentDetailsView(CorePaymentDetailsView):
         try:
             template_src = "quotation/quote_pdf.html"
             pdf = PDFView()
+            print shipping_charge.incl_tax, order_total.incl_tax
             PDFView.render_to_pdf(pdf, template_src,
                                   {"title": "Quote Request", 'basket': basket, 'order_number': order_number,
-                                   'user': user,
-                                   'address': shipping_address, 'datetime': datetime.now()},
+                                   'user': user, 'shipping_method': shipping_method, 'shipping_charge': shipping_charge,
+                                   'address': shipping_address, 'order_total': order_total, 'datetime': datetime.now()},
                                   "media/quote" + str(basket.id) + ".pdf")
 
             return self.handle_order_placement(
