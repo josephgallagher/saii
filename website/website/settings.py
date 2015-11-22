@@ -55,7 +55,8 @@ INSTALLED_APPS = [
     'easy_pdf',
     'pdfkit',
     'corsheaders',
-    'stronghold'
+    'stronghold',
+    'weasyprint'
     # 'paypal',
 ] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer'])
 

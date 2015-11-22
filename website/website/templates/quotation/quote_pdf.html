@@ -10,23 +10,23 @@
             margin-top: 0cm;
             margin-bottom: 2cm;
 
-            @frame header {
-                -pdf-frame-content: page-header;
-                margin-top: 0.0cm;
-                margin-right:1.0cm;
-                margin-bottom: 2.0cm;
-                margin-left: 3.5cm;
-                padding-top: -2cm;
-            }
+        {#            @frame header {#}
+        {#                -pdf-frame-content: page-header;#}
+        {#                margin-top: 0.0cm;#}
+        {#                margin-right:0.0cm;#}
+        {#                margin-bottom: 2.0cm;#}
+        {#                margin-left: 0.0cm;#}
+        {#                padding-top: 0cm;#}
+        {#            }#}
         }
     </style>
 {% endblock %}
 
 {% block extra_style %}
     <style type="text/css">
-        @font-face { font-family: Lato; src: url(fonts/Lato-Bol.ttf); font-weight: bold; }
-        @font-face { font-family: Lato; src: url(fonts/Lato-Reg.ttf); }
-        @font-face { font-family: "Lato Light"; src: url(fonts/Lato-Lig.ttf); }
+        {#        @font-face { font-family: Lato; src: url(fonts/Lato-Bol.ttf); font-weight: bold; }#}
+        {#        @font-face { font-family: Lato; src: url(fonts/Lato-Reg.ttf); }#}
+        {#        @font-face { font-family: "Lato Light"; src: url(fonts/Lato-Lig.ttf); }#}
 
         html {
             font-family: "Lato", "Helvetica", "sans-serif";
@@ -43,191 +43,249 @@
             line-height: 140%;
             margin-bottom: 20px;
         }
-            table.bordered {
-                border-top: 0.1pt solid #999999;
-                border-bottom: 0.1pt solid #999999;
-            }
 
-            tr, td, th { border: none; }
+        table.bordered {
+            border-top: 0.1pt solid #999999;
+            border-bottom: 0.1pt solid #999999;
+        }
 
-            th {
-                font-size: 10pt;
-                border-bottom: 0.1pt solid #999999;
-                padding: 3px 0;
-                line-height: 1;
-                font-weight: bold;
-            }
+        tr, td, th {
+            border: none;
+        }
 
-            td {
-                font-size: 10pt;
-                font-family: "Lato", "Helvetica", "sans-serif";
-                vertical-align: top;
-                padding: 3px 0;
-            }
+        th {
+            font-size: 10pt;
+            border-bottom: 0.1pt solid #999999;
+            padding: 3px 0;
+            line-height: 1;
+            font-weight: bold;
+        }
 
-            td:last-child { padding-bottom: 0; }
+        td {
+            font-size: 10pt;
+            font-family: "Lato", "Helvetica", "sans-serif";
+            vertical-align: top;
+            padding: 3px 0;
+        }
 
-        .text-left { text-align: left; }
-        .text-right { text-align: right; }
-        .bottom-10 { margin-bottom: 10px; }
-        .bottom-20 { margin-bottom: 20px; }
+        td:last-child {
+            padding-bottom: 0;
+        }
 
-        .header { color: #7f7f7f; }
-        .header p { font-size: 13px; line-height: 1.5em; }
-        .header-link { font-weight: bold; text-decoration: none; color: #2F3640; font-size: 14px; }
-        .logo { margin-bottom: 20px; margin-left: -25px; }
-{#        .logo img { zoom: 60%; }#}
+        .text-left {
+            text-align: left;
+        }
 
-        .recipient { margin-left: 7cm; padding-top: 3.0cm; }
+        .text-right {
+            text-align: right;
+        }
 
-        .main h1 {
-            margin: 18px 0 18px 0;
-            font-size: 250%;
-            font-weight: normal;
+        {#        .bottom-10 { margin-bottom: 10px; }#}
+        {#        .bottom-20 { margin-bottom: 20px; }#}
+
+        .header {
+            color: #7f7f7f;
+        }
+
+        .header p {
+            font-size: 13px;
+            line-height: 1.5em;
+        }
+
+        .header-link {
+            font-weight: bold;
+            text-decoration: none;
             color: #2F3640;
+            font-size: 14px;
         }
 
-        .main h2 {
-            margin: 18px 0 6px 0;
-            font-size: 180%;
-            font-weight: normal;
+        {#        .logo { margin-bottom: 20px; }#}
+        .logo img.resize {
+            width: 540px;
+            height: auto;
         }
 
-        .info { border: 1px solid #4F81BD; padding: 10px; margin-top: 50px; margin-bottom: 50px; }
-        .info a { color: #4F81BD; text-decoration: none; }
+        {#        .recipient { margin-right: 7cm; padding-top: 0.0cm; }#}
+        {#        .name {text-align: right }#}
+        .recipient {
+            display: inline-block;
+            vertical-align: top
+        }
+
+        .main {
+            padding-top: 3cm;
+        }
+
+        {#        .main h3 {#}
+        {#            margin: 18px 0 18px 0;#}
+        {#            font-size: 250%;#}
+        {#            font-weight: normal;#}
+        {#            color: #2F3640;#}
+        {#        }#}
+        {##}
+        {#        .main h2 {#}
+        {#            margin: 18px 0 6px 0;#}
+        {#            font-size: 180%;#}
+        {#            font-weight: normal;#}
+        {#        }#}
+
+        .info {
+            border: 1px solid #4F81BD;
+            padding: 10px;
+            margin-top: 50px;
+            margin-bottom: 50px;
+        }
+
+        .info a {
+            color: #4F81BD;
+            text-decoration: none;
+        }
+
+        .system {
+            text-decoration: underline
+        }
 
     </style>
 {% endblock %}
 
-{%block page_header%}
+{% block page_header %}
     <div id="page-header">
         <div class="header">
-            <p class="logo"><img src="http://localhost:8001/static/logo.jpg" /></p>
-{#            <p>#}
-{#                SA Instruments, Inc.<br>#}
-{#                65 Main Street <br>#}
-{#                Stony Brook, NY 11790<br>#}
-{#                United States <br/>#}
-{#            </p>#}
-{#            <p class="header-link">#}
-{#                <a class="header-link" href="http://www.i4sa.com">i4sa</a>#}
-{#            </p>#}
+            <p class="logo"><img class="resize" src="http://localhost:8001/static/logo.jpg"/></p>
+            {#            <p>#}
+            {#                SA Instruments, Inc.<br>#}
+            {#                65 Main Street <br>#}
+            {#                Stony Brook, NY 11790<br>#}
+            {#                United States <br/>#}
+            {#            </p>#}
+            {#            <p class="header-link">#}
+            {#                <a class="header-link" href="http://www.i4sa.com">i4sa</a>#}
+            {#            </p>#}
         </div>
     </div>
 {% endblock %}
 
 {% block content %}
     <div id="content">
-        <div class="recipient bottom-10">
-            <p class="bottom-10">
-                <strong>{{ address.facility }}</strong>
-{#                <br>{{ user.first_name }} {{ user.last_name }}#}
-            </p>
-            <p class="bottom-10">
-                {{ address }}<br>
-                {{ datetime }} UTC
-            </p>
-        </div>
+        <p class="bottom-10">
+            {#                <strong>{{ address.facility }}</strong>#}
+            {#                <br>{{ user.first_name }} {{ user.last_name }}#}
+        </p>
 
+        <p class="recipient" style="float: left;">
+            <strong>Quotation Number: {{ order_number }}</strong><br>
+            {{ address.line1 }}<br>
+            {{ address.line2 }}<br>
+            {{ address.line3 }}<br>
+            {{ address.line4 }}, {{ address.state }} {{ address.postcode }}
+        </p>
 
-{#        <p class="info">#}
-{#            This is an example of <a href="https://github.com/nigma/django-easy-pdf">django-easy-pdf</a>#}
-{#            &ndash; Django PDF rendering the easy way.#}
-{#            Check <a href="http://en.ig.ma/">en.ig.ma</a> for Django and Python development.#}
-{#        </p>#}
+        <p class="recipient" style="float: right;">
+            {{ datetime }} UTC<br>
+            <strong>Requested by:</strong><br>
+            {{ user.first_name }} {{ user.last_name }}<br>
+            {{ user.email }}<br/>
+
+        </p>
+
+        {#        <p class="info">#}
+        {#            This is an example of <a href="https://github.com/nigma/django-easy-pdf">django-easy-pdf</a>#}
+        {#            &ndash; Django PDF rendering the easy way.#}
+        {#            Check <a href="http://en.ig.ma/">en.ig.ma</a> for Django and Python development.#}
+        {#        </p>#}
 
         <div class="main">
-            <h1>Quote Request {{ order.number }}</h1>
 
             <table class="bordered bottom-20">
                 <tr>
-                    <td class="item-name"><strong>Quotation number</strong>{{ order_number }}</td>
-{#                    <td><strong>{{ datetime|date:"y/m/d/1" }}</strong></td>#}
+                    {#                    <td class="item-name"><strong>Quotation number</strong>{{ order_number }}</td>#}
+                    {#                    <td><strong>{{ datetime|date:"y/m/d/1" }}</strong></td>#}
                 </tr>
 
+                <hr>
+
+                {% block body %}
+
+{#                    <p xmlns="http://www.w3.org/1999/html">{% trans 'Hello,' %}</p>#}
+{##}
+{#                    <p style="padding-bottom: 0.5cm">{% blocktrans with quotation_number=order_number %}We are pleased#}
+{#                        to confirm your quote request {{ quotation_number }} has been received and#}
+{#                        will be processed shortly.{% endblocktrans %}</p>#}
+
+                    <p class="system">{% trans 'MR-Compatible Small Animal Monitoring and Gating Accessories:' %}</p>
+
+                    {#                <ul>#}
+                    {#                    {% for line in basket.lines.all %}#}
+                    {#                    <li>{{ line.product }} - {%  trans 'quantity:' %} {{ line.quantity }} - {% trans 'price:' %} {{ line.line_price_incl_tax|currency:basket.currency }}</li>#}
+                    {#                    {% endfor %}#}
+                    {#                </ul>#}
+
+
+                    {#                <p>{% trans 'Shipping address:' %}</p>#}
+                    {#                <p>{% for field in order.shipping_address.active_address_fields %}  {{ field }}<br/>#}
+                    {#                {% endfor %}</p>#}
+
+                    {% if status_url %}
+                        <p>{% blocktrans %}You can view the status of this order by clicking
+                            <a href="{{ status_url }}" title="order status">here</a>{% endblocktrans %}</p>
+                    {% endif %}{% endblock %}
 
 
 
 
 
-                {% block body %}<p xmlns="http://www.w3.org/1999/html">{% trans 'Hello,' %}</p>
-
-                <p>{% blocktrans with quotation_number=order.number %}We are pleased to confirm your quote request {{ quotation_number }} has been received and
-                will be processed shortly.{% endblocktrans %}</p>
-
-                <p>{% trans 'Your quote request contains:' %}</p>
-
-{#                <ul>#}
-{#                    {% for line in basket.lines.all %}#}
-{#                    <li>{{ line.product }} - {%  trans 'quantity:' %} {{ line.quantity }} - {% trans 'price:' %} {{ line.line_price_incl_tax|currency:basket.currency }}</li>#}
-{#                    {% endfor %}#}
-{#                </ul>#}
-
-
-{#                <p>{% trans 'Shipping address:' %}</p>#}
-{#                <p>{% for field in order.shipping_address.active_address_fields %}  {{ field }}<br/>#}
-{#                {% endfor %}</p>#}
-
-                {% if status_url %}
-                <p>{% blocktrans %}You can view the status of this order by clicking <a href="{{ status_url }}" title="order status">here</a>{% endblocktrans %}</p>
-                {% endif %}{% endblock %}
 
 
 
 
 
-
-
-
-
-
-{#                <tr>#}
-{#                    <td class="item-name">Amount</td>#}
-{#                    <td><strong>100 Doge</strong></td>#}
-{#                </tr>#}
+                {#                <tr>#}
+                {#                    <td class="item-name">Amount</td>#}
+                {#                    <td><strong>100 Doge</strong></td>#}
+                {#                </tr>#}
             </table>
 
 
-            <table>
+            <table style="width:100%">
                 <thead>
-                    <tr>
-                        <th class="text-left">Description</th>
-                        <th class="text-right">Amount</th>
-                        <th class="text-right">Price</th>
-                        <th class="text-right">Total</th>
-                    </tr>
+                <tr>
+                    <th class="text-left">Item</th>
+                    <th class="text-right">Quantity</th>
+                    <th class="text-right">Unit Price</th>
+                    <th class="text-right">Total</th>
+                </tr>
                 </thead>
                 <tbody>
-                    {% for line in basket.lines.all %}
+                {% for line in basket.lines.all %}
                     <tr>
                         <td class="text-left">{{ line.product }}</td>
                         <td class="text-right">{{ line.quantity }}</td>
                         <td class="text-right">{{ line.unit_price_incl_tax|currency:basket.currency }}</td>
                         <td class="text-right">{{ line.line_price_incl_tax|currency:basket.currency }}</td>
                     </tr>
-                    {% endfor %}
+                {% endfor %}
                 </tbody>
             </table>
 
-            <table class="bottom-20">
+            <table class="bottom-20" style="width:100%">
                 <tr>
                     <td><strong>Total</strong></td>
                     <td class="text-right"><strong>{{ basket.total_excl_tax }}</strong></td>
                 </tr>
             </table>
 
-            <h2>Terms:</h2>
+            <h3>Terms:</h3>
 
             <p class="bottom-20">
-                Shipping charges and bank fees are additional.
-                Customer is responsible for insurance and any applicable taxes.
-                Payment: net 30. Bank transfer, check or credit card (Visa or MasterCard)
-                A convenience fee will be added for credit card orders.
-                Warranty on accessories is 30 days.
+                Shipping charges and bank fees are additional.<br>
+                Customer is responsible for insurance and any applicable taxes.<br>
+                Payment: net 30. Bank transfer, check or credit card (Visa or MasterCard)<br>
+                A convenience fee will be added for credit card orders.<br>
+                Warranty on accessories is 30 days.<br>
             </p>
 
-{#            <p>Dogecoin address (it's real): <strong>DREWeqR5KB2rbpJFybKvWepNs6sUQZowNs</strong></p>#}
-{#            <pdf:barcode value="DREWeqR5KB2rbpJFybKvWepNs6sUQZowNs" type="qr" barwidth="100" barheight="100" />#}
+            {#            <p><strong>DREWeqR5KB2rbpJFybKvWepNs6sUQZowNs</strong></p>#}
+            {#            <pdf:barcode value="DREWeqR5KB2rbpJFybKvWepNs6sUQZowNs" type="qr" barwidth="100" barheight="100" />#}
         </div>
     </div>
 {% endblock %}
