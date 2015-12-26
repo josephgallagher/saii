@@ -30,9 +30,14 @@ THUMBNAIL_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
+# LOGIN_REDIRECT_URL = "customer:address-create"
+
 OSCAR_SHOP_NAME = 'SAII'
 OSCAR_DEFAULT_CURRENCY = 'USD'
 OSCAR_HIDDEN_FEATURES = ['reviews', 'wishlists']
+# Address settings
+OSCAR_REQUIRED_ADDRESS_FIELDS = ('first_name', 'last_name', 'facility',
+                                 'postcode', 'country')
 
 
 # Application definition
@@ -56,9 +61,9 @@ INSTALLED_APPS = [
     'pdfkit',
     'corsheaders',
     'stronghold',
-    'weasyprint'
+
     # 'paypal',
-] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.shipping'])
+] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.address'])
 
 
 SITE_ID = 1
@@ -324,6 +329,9 @@ COMPRESS_OFFLINE_CONTEXT = {
 STRONGHOLD_PUBLIC_URLS = (
     r'^/admin.*?$',  # Don't touch the admin pages
     r'^/accounts/login/$',  # Avoid redirect loop
+    r'^/accounts/login/?next=/password-reset/$',
+    r'^/password-reset/$',
+    r'^/password-reset/done/$',
 )
 
 

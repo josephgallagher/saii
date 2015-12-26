@@ -131,6 +131,8 @@ class PaymentMethodView(CorePaymentDetailsView):
 # PDF
 # ==============
 import subprocess
+from weasyprint import HTML
+
 class PDFView(PDFTemplateView):
     template_name = "quotation/quote_pdf.html"
 
@@ -150,10 +152,11 @@ class PDFView(PDFTemplateView):
         html_file.write(html)
         html_file.close()
         try:
-            subprocess.call(['weasyprint', "quote.html", filename])
+            HTML('/home/joseph/dev/saii2/website/quote.html', ).write_pdf(filename)
+            # subprocess.call(['weasyprint --base-url "http://www.i4saquotes.com"', "quote.html", filename])
             # pdfkit.from_file("quote.html", filename)
-        except IOError as e:
-            return e
+        except OSError as e:
+            return "ERROR in %s" % filename
 
         # pdf = pisa.CreatePDF(html_file, file(filename, "w"))
         # pdf = pisa.pisaDocument(StringIO.StringIO(
