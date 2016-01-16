@@ -63,7 +63,7 @@ INSTALLED_APPS = [
     'stronghold',
 
     # 'paypal',
-] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.address'])
+] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.address', 'website.apps.shipping'])
 
 
 SITE_ID = 1
