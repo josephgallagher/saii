@@ -22,12 +22,12 @@
 
 {% block content %}
     <p class="lead">
-        {% blocktrans with number=order.number %}
-        Your order has been placed and a confirmation email has been sent - your order number is
-        <strong>{{ number }}</strong>.
-        {% endblocktrans %}
-        {% trans "Please make a note of this reference or print this page and quote it in any communication with us regarding your order." %}</p>
-    </p>
+{#        {% blocktrans with number=order.number %}#}
+        {% if order %}
+            An email containing your quotation has been sent to {{ order.user.email }}. Your quotation number is <strong>{{ order.number }}</strong>.
+        {% endif %}
+{#        {% endblocktrans %}#}
+        {% trans "Please make a note of this reference or print this page and quote it in any communication with us regarding your request." %}</p>
 
     <div class="row shipping-payment">
         <div class="col-sm-6">
@@ -314,7 +314,7 @@
                     <p><a onclick="window.print()" href="#" class="btn btn-primary btn-block btn-lg">{% trans "Print this page" %}</a></p>
                 </div>
                 <div class="col-sm-4 col-sm-offset-4">
-                    <p><a href="{{ homepage_url }}" class="btn btn-primary btn-block btn-lg">{% trans "Bak" %}</a></p>
+                    <p><a href="{{ homepage_url }}" class="btn btn-primary btn-block btn-lg">{% trans "Back" %}</a></p>
                 </div>
             </div>
         </div>

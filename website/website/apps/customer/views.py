@@ -3,6 +3,7 @@ __author__ = 'joseph'
 from oscar.core.loading import get_class, get_classes, get_model
 from oscar.views.generic import PostActionMixin
 from oscar.core.utils import safe_referrer
+from . import signals
 
 from django import http
 from django.conf import settings
@@ -33,7 +34,7 @@ class AccountAuthView(RegisterUserMixin, generic.TemplateView):
     template_name = 'customer/login_registration.html'
     login_prefix, registration_prefix = 'login', 'registration'
     login_form_class = EmailAuthenticationForm
-    registration_form_class = EmailUserCreationForm
+    registration_form_class = AddressCreationForm
     redirect_field_name = 'next'
 
     def get(self, request, *args, **kwargs):

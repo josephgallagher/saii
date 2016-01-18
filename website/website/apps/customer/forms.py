@@ -226,8 +226,8 @@ class EmailUserCreationForm(CoreEmailUserCreationForm):
     # new_user.is_default_for_shipping = True
     # country = form_class.get_country(form_class)
 
-
-
+    first_name = forms.CharField(label=_('First name'))
+    last_name = forms.CharField(label=_('Last name'))
     serial = forms.IntegerField(error_messages={'required': 'Please enter a valid number.'},
                                 label=_('Serial Number'), widget=forms.NumberInput,
                                 help_text="From Control/Gating module", validators=[validate_serial])
@@ -241,7 +241,7 @@ class EmailUserCreationForm(CoreEmailUserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email',)
+        fields = ('email','first_name', 'last_name')
 
 
     def __init__(self, host=None, *args, **kwargs):

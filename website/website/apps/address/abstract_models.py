@@ -491,9 +491,9 @@ class AbstractUserAddress(AbstractShippingAddress):
     model, we allow users the ability to add/edit/delete from their address
     book without affecting orders already placed.
     """
-    user = models.ForeignKey(
-        AUTH_USER_MODEL, related_name='addresses', verbose_name=_("User"))
-
+    # user = models.ForeignKey(
+    #     AUTH_USER_MODEL, related_name='addresses', verbose_name=_("User"))
+    user = models.OneToOneField(AUTH_USER_MODEL, related_name='addresses', verbose_name=_("User"))
     #: Whether this address is the default for shipping
     is_default_for_shipping = models.BooleanField(
         _("Default shipping address?"), default=False)

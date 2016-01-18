@@ -440,13 +440,15 @@ class PaymentDetailsView(CorePaymentDetailsView):
         # If all is ok with payment, try and place order
         logger.info("Order #%s: payment successful, placing order",
                     order_number)
+        print 100 * ("USER: %s\n" % str(user.email))
         try:
             template_src = "quotation/quote_pdf.html"
             pdf = PDFView()
+            # print 100 * ("USER: %s\n" % str(user.email))
 
             PDFView.render_to_pdf(pdf, template_src,
                                   {"title": "Quote Request", 'basket': basket, 'order_number': order_number,
-                                   'user': user, 'shipping_method': shipping_method, 'shipping_charge': shipping_charge,
+                                   'user': user, 'email': user.email, 'shipping_method': shipping_method, 'shipping_charge': shipping_charge,
                                    'address': shipping_address, 'order_total': order_total, 'datetime': datetime.now()},
                                   "media/quote" + str(basket.id) + ".pdf")
 
