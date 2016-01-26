@@ -31,6 +31,8 @@ THUMBNAIL_DEBUG = True
 ALLOWED_HOSTS = ['*']
 
 # LOGIN_REDIRECT_URL = "customer:address-create"
+# REGISTER_REDIRECT_URL = "#"
+CRISPY_TEMPLATE_PACK = 'bootstrap3'
 
 OSCAR_SHOP_NAME = 'SAII'
 OSCAR_DEFAULT_CURRENCY = 'USD'
@@ -61,10 +63,14 @@ INSTALLED_APPS = [
     'pdfkit',
     'corsheaders',
     'stronghold',
-
+    'website.apps.user',
+    'django_modalview',
+    'crispy_forms',
+    'feedback_form',
+    'fm',
     # 'paypal',
-] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.address', 'website.apps.shipping'])
-
+] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.address', 'website.apps.shipping',])
+AUTH_USER_MODEL = "user.User"
 
 SITE_ID = 1
 

@@ -5,6 +5,8 @@ from django.views import generic
 from oscar.core.application import Application
 from oscar.core.loading import get_class
 
+# from feedback_form.views import FeedbackCreateView
+
 
 class CustomerApplication(Application):
     name = 'customer'
@@ -72,6 +74,10 @@ class CustomerApplication(Application):
     quotation_history_view = get_class('customer.views', 'QuotationHistoryView')
     quotation_detail_view = get_class('customer.views', 'QuotationDetailView')
 
+    # my_modal = get_class('customer.views', 'MyCreateModal')
+    user_address_create_view = get_class('customer.views', 'UserAddressCreateView')
+
+
     def get_urls(self):
         urls = [
             # Login, logout and register doesn't require login
@@ -94,6 +100,8 @@ class CustomerApplication(Application):
             url(r'^profile/delete/$',
                 login_required(self.profile_delete_view.as_view()),
                 name='profile-delete'),
+            # url(r'^mymodal/', self.my_modal.as_view(), name='mymodal'),
+            url(r'^profile/create/$', login_required(self.user_address_create_view.as_view()), name="feedback_create"),
 
             # Order history
             url(r'^orders/$',

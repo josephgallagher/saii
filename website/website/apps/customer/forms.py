@@ -137,11 +137,11 @@ def validate_serial(num):
 
 
 from ..address.forms import UserAddressForm, UserAddress
-from ..address.models import UserAddress, Country
+# from ..address.models import UserAddress, Country
 from oscar.apps.customer.forms import EmailUserCreationForm as CoreEmailUserCreationForm
 
-class AddressCreationForm(CoreEmailUserCreationForm):
-    # form_class = UserAddressForm
+class AddressCreationForm(UserAddressForm):
+    form_class = UserAddressForm
 
     def __init__(self, host=None, *args, **kwargs):
         self.host = host
@@ -228,6 +228,7 @@ class EmailUserCreationForm(CoreEmailUserCreationForm):
 
     first_name = forms.CharField(label=_('First name'))
     last_name = forms.CharField(label=_('Last name'))
+    facility = forms.CharField(label=_('Facility'))
     serial = forms.IntegerField(error_messages={'required': 'Please enter a valid number.'},
                                 label=_('Serial Number'), widget=forms.NumberInput,
                                 help_text="From Control/Gating module", validators=[validate_serial])
@@ -241,7 +242,7 @@ class EmailUserCreationForm(CoreEmailUserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email','first_name', 'last_name')
+        fields = ('email', 'first_name', 'last_name', 'facility',)
 
 
     def __init__(self, host=None, *args, **kwargs):

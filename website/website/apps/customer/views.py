@@ -12,6 +12,8 @@ from django.views import generic
 from django.core.urlresolvers import reverse, reverse_lazy
 from django.shortcuts import get_object_or_404, redirect
 from django.contrib.auth import login as auth_login
+from oscar.apps.customer.utils import get_password_reset_url
+from django.contrib.sites.models import get_current_site
 
 
 from django.utils.translation import ugettext_lazy as _
@@ -24,6 +26,19 @@ UserAddressForm = get_class('address.forms', 'UserAddressForm')
 EmailUserCreationForm = get_class('customer.forms', 'EmailUserCreationForm')
 EmailAuthenticationForm = get_class('customer.forms', 'EmailAuthenticationForm')
 AddressCreationForm = get_class('customer.forms', 'AddressCreationForm')
+ProfileForm, ConfirmPasswordForm = get_classes(
+    'customer.forms', ['ProfileForm', 'ConfirmPasswordForm'])
+CommunicationEventType = get_model('customer', 'CommunicationEventType')
+Dispatcher = get_class('customer.utils', 'Dispatcher')
+# FormSet = get_class('customer.forms', 'FormSet')
+
+
+from django.forms.models import inlineformset_factory
+from oscar.core.compat import get_user_model
+
+User = get_user_model()
+
+FormSet = inlineformset_factory(User, UserAddress, exclude=(), )
 
 
 class AccountAuthView(RegisterUserMixin, generic.TemplateView):
@@ -32,9 +47,10 @@ class AccountAuthView(RegisterUserMixin, generic.TemplateView):
     either login or register.
     """
     template_name = 'customer/login_registration.html'
-    login_prefix, registration_prefix = 'login', 'registration'
+    login_prefix, registration_prefix, address_prefix = 'login', 'registration', 'address'
     login_form_class = EmailAuthenticationForm
-    registration_form_class = AddressCreationForm
+    registration_form_class = EmailUserCreationForm
+    # address_form_class = AddressCreationForm
     redirect_field_name = 'next'
 
     def get(self, request, *args, **kwargs):
@@ -49,6 +65,8 @@ class AccountAuthView(RegisterUserMixin, generic.TemplateView):
             ctx['login_form'] = self.get_login_form()
         if 'registration_form' not in kwargs:
             ctx['registration_form'] = self.get_registration_form()
+        # if 'address_form' not in kwargs:
+        #     ctx['address_form'] = self.get_address_form()
         return ctx
 
     def post(self, request, *args, **kwargs):
@@ -57,6 +75,8 @@ class AccountAuthView(RegisterUserMixin, generic.TemplateView):
             return self.validate_login_form()
         elif u'registration_submit' in request.POST:
             return self.validate_registration_form()
+        # elif u'address_submit' in request.POST:
+        #     return self.validate_address_form()
         return http.HttpResponseBadRequest()
 
     # LOGIN
@@ -70,7 +90,7 @@ class AccountAuthView(RegisterUserMixin, generic.TemplateView):
         kwargs['host'] = self.request.get_host()
         kwargs['prefix'] = self.login_prefix
         kwargs['initial'] = {
-            'redirect_url': self.request.GET.get(self. redirect_field_name, ''),
+            'redirect_url': self.request.GET.get(self.redirect_field_name, ''),
         }
         if bind_data and self.request.method in ('POST', 'PUT'):
             kwargs.update({
@@ -127,6 +147,7 @@ class AccountAuthView(RegisterUserMixin, generic.TemplateView):
 
     def get_registration_form_kwargs(self, bind_data=False):
         kwargs = {}
+        print self.request.get_host()
         kwargs['host'] = self.request.get_host()
         kwargs['prefix'] = self.registration_prefix
         kwargs['initial'] = {
@@ -153,7 +174,7 @@ class AccountAuthView(RegisterUserMixin, generic.TemplateView):
         return self.render_to_response(ctx)
 
     def get_registration_success_message(self, form):
-        return _("Thanks for registering!")
+        return _("Please add an address before continuing!")
 
     def get_registration_success_url(self, form):
         redirect_url = form.cleaned_data['redirect_url']
@@ -161,6 +182,102 @@ class AccountAuthView(RegisterUserMixin, generic.TemplateView):
             return redirect_url
 
         return settings.LOGIN_REDIRECT_URL
+
+
+# Address
+
+    # def get_address_form(self, bind_data=False):
+    #     return self.address_form_class(
+    #         **self.get_address_form_kwargs(bind_data))
+    #
+    # def get_address_form_kwargs(self, bind_data=False):
+    #     kwargs = {}
+    #     user = self.request.user
+    #     print self.request.get_host()
+    #     kwargs['host'] = self.request.get_host()
+    #     kwargs['user'] = user
+    #     kwargs['prefix'] = self.address_prefix
+    #     kwargs['initial'] = {
+    #         'redirect_url': self.request.GET.get(self.redirect_field_name, ''),
+    #     }
+    #     if bind_data and self.request.method in ('POST', 'PUT'):
+    #         kwargs.update({
+    #             'data': self.request.POST,
+    #             'files': self.request.FILES,
+    #         })
+    #     return kwargs
+    #
+    # def validate_address_form(self):
+    #     form = self.get_address_form(bind_data=True)
+    #     if form.is_valid():
+    #         # self.address_user(form)
+    #
+    #         msg = self.get_address_success_message(form)
+    #         messages.success(self.request, msg)
+    #
+    #         return redirect(self.get_address_success_url(form))
+    #
+    #     ctx = self.get_context_data(address_form=form)
+    #     return self.render_to_response(ctx)
+    #
+    # def get_address_success_message(self, form):
+    #     return _("Thanks for registering!")
+    #
+    # def get_address_success_url(self, form):
+    #     redirect_url = 'redirect_url'
+    #     if redirect_url:
+    #         return redirect_url
+    #
+    #     return settings.LOGIN_REDIRECT_URL
+
+
+
+
+class ProfileUpdateView(PageTitleMixin, generic.FormView):
+    form_class = ProfileForm
+    template_name = 'customer/profile/profile_form.html'
+    communication_type_code = 'EMAIL_CHANGED'
+    page_title = _('Edit Profile')
+    active_tab = 'profile'
+    success_url = reverse_lazy('customer:profile-view')
+
+    def get_form_kwargs(self):
+        kwargs = super(ProfileUpdateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        # Grab current user instance before we save form.  We may need this to
+        # send a warning email if the email address is changed.
+        try:
+            old_user = User.objects.get(id=self.request.user.id)
+        except User.DoesNotExist:
+            old_user = None
+
+        form.save()
+
+        # We have to look up the email address from the form's
+        # cleaned data because the object created by form.save() can
+        # either be a user or profile instance depending whether a profile
+        # class has been specified by the AUTH_PROFILE_MODULE setting.
+        new_email = form.cleaned_data['email']
+        if old_user and new_email != old_user.email:
+            # Email address has changed - send a confirmation email to the old
+            # address including a password reset link in case this is a
+            # suspicious change.
+            ctx = {
+                'user': self.request.user,
+                'addresses': self.request.user.addresses,
+                'site': get_current_site(self.request),
+                'reset_url': get_password_reset_url(old_user),
+                'new_email': new_email,
+            }
+            msgs = CommunicationEventType.objects.get_and_render(
+                code=self.communication_type_code, context=ctx)
+            Dispatcher().dispatch_user_messages(old_user, msgs)
+
+        messages.success(self.request, _("Profile updated"))
+        return redirect(self.get_success_url())
 
 
 # =============
@@ -252,7 +369,7 @@ class QuotationDetailView(PageTitleMixin, PostActionMixin, generic.DetailView):
             lines_to_add.append(line)
 
         # for line in quotation.basket.lines.all():
-        #     is_available, reason = line.is_available_to_reorder(
+        # is_available, reason = line.is_available_to_reorder(
         #         basket, self.request.strategy)
         #     if is_available:
         #         lines_to_add.append(line)
@@ -296,6 +413,7 @@ class QuotationDetailView(PageTitleMixin, PostActionMixin, generic.DetailView):
                   "as none of its lines are available to purchase") %
                 {'number': quotation.number})
 
+
 # ------------
 # Address book
 # ------------
@@ -335,6 +453,76 @@ class AddressCreateView(PageTitleMixin, generic.CreateView):
         messages.success(self.request,
                          _("Address '%s' created") % self.object.summary)
         return super(AddressCreateView, self).get_success_url()
+
+from fm.views import AjaxCreateView
+from feedback_form.forms import FeedbackForm
+
+class UserAddressCreateView(AjaxCreateView):
+    form_class = UserAddressForm
+
+    def get_form_kwargs(self):
+        kwargs = super(UserAddressCreateView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def get_context_data(self, **kwargs):
+        ctx = super(UserAddressCreateView, self).get_context_data(**kwargs)
+        ctx['title'] = _('Add a new address')
+        return ctx
+
+    def get_success_url(self):
+        messages.success(self.request,
+                         _("Address '%s' created") % self.object.summary)
+        return super(UserAddressCreateView, self).get_success_url()
+
+
+# from django_modalview.generic.edit import ModalFormView
+# from django_modalview.generic.component import ModalResponse
+#
+# class MyFormModal(ModalFormView):
+#
+#     def __init__(self, *args, **kwargs):
+#         super(MyFormModal, self).__init__(*args, **kwargs)
+#         # self.title = "My title"
+#
+#         self.form_class = UserAddressForm #Your django form
+#         #self.submit_button has a default value
+#
+#     def form_valid(self, form, **kwargs):
+#         self.response = ModalResponse('Form valid', 'success')
+
+
+
+#
+# from django_modalview.generic.edit import ModalCreateView
+# from django_modalview.generic.component import ModalResponse
+#
+# # from myapp.forms import MyModelForm
+# #
+#
+# class MyCreateModal(ModalCreateView):
+#
+#     def __init__(self, *args, **kwargs):
+#         super(MyCreateModal, self).__init__(*args, **kwargs)
+#         # self.title = "My modal"
+#         self.form_class = UserAddressForm
+#
+#     def form_valid(self, form, **kwargs):
+#         '''
+#             The form_valid have to return the parent form_valid.
+#             In this example I will show you the two most populare case.
+#             The first you want just display a success message without the new object
+#         '''
+#         # self.response = ModalResponse("Good game", "success")
+#         # return super(MyCreateModal, self).form_valid(form, **kwargs)
+#
+#         '''
+#             The second, you want use the new object
+#         '''
+#         self.save(form) #When you save the form an attribute name object is created.
+#         self.response = ModalResponse("{obj} is created".format(obj=self.object), 'success')
+#         #When you call the parent method you set commit to false because you have save the object.
+#         return super(MyCreateModal, self).form_valid(form, commit=False, **kwargs)
 
 
 class AddressUpdateView(PageTitleMixin, generic.UpdateView):
@@ -391,7 +579,7 @@ class AddressChangeStatusView(generic.RedirectView):
     def get(self, request, pk=None, action=None, *args, **kwargs):
         address = get_object_or_404(UserAddress, user=self.request.user,
                                     pk=pk)
-        #  We don't want the user to set an address as the default shipping
+        # We don't want the user to set an address as the default shipping
         #  address, though they should be able to set it as their billing
         #  address.
         if address.country.is_shipping_country:
