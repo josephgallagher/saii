@@ -63,7 +63,7 @@ INSTALLED_APPS = [
                      'pdfkit',
                      'corsheaders',
                      'stronghold',
-                     'website.apps.user',
+                     # 'website.apps.user',
                      'django_modalview',
                      # 'crispy_forms',
                      # 'feedback_form',
@@ -74,7 +74,7 @@ INSTALLED_APPS = [
     ['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.address',
      'website.apps.shipping', 'website.apps.catalogue'])
 
-AUTH_USER_MODEL = "user.User"
+# AUTH_USER_MODEL = "user.User"
 
 SITE_ID = 1
 
