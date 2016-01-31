@@ -5,6 +5,11 @@ from django.views import generic
 from oscar.core.application import Application
 from oscar.core.loading import get_class
 
+from django.contrib.auth.decorators import user_passes_test
+
+
+require_address = user_passes_test(lambda u: len(u.addresses.all()) != 0, '/dcgadga')
+
 
 class CustomerApplication(Application):
     name = 'customer'

@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% load staticfiles %}
+{% load i18n %}
+
+{% block title %}
+    {% trans 'Login or register' %} | {{ block.super }}
+{% endblock %}
+
+{% block breadcrumbs %}
+    <ul class="breadcrumb">
+        <li>
+            <a href="{{ homepage_url }}">{% trans 'Home' %}</a>
+        </li>
+        <li class="active">{% trans 'Login or register' %}</li>
+    </ul>
+{% endblock %}
+
+{% block header %}{% endblock %}
+
+{% block content %}
+
+    <div class="row">
+        <div class="col-sm-6 login_form">
+            <form id="login_form" action="{{ request.get_full_path }}" method="post" class="well" >
+                <h2>{% trans 'Log In' %}</h2>
+                {% csrf_token %}
+                {% include "partials/form_fields.html" with form=login_form %}
+                <p><a href="{% url 'password-reset' %}">{% trans "I've forgotten my password" %}</a></p>
+                <button name="login_submit" type="submit" value="Log In" class="btn btn-lg btn-primary" data-loading-text="{% trans "Logging in..." %}">{% trans 'Log In' %}</button>
+            </form>
+        </div>
+
+{#        <script type="text/javascript">#}
+{#            function showHide() {#}
+{#            var div = document.getElementById("register");#}
+{#            if (div.style.display == 'none') {#}
+{#                div.style.display = '';#}
+{#            }#}
+{#            else {#}
+{#                div.style.display = 'none';#}
+{#            }#}
+{#            }#}
+{#      </script>#}
+
+        <div class="col-sm-6 address_form">
+            <div id="register">
+            <form id="register_form" action="{{ request.get_full_path }}" method="post" class="well">
+                <h2>{% trans 'Register' %}</h2>
+                {% csrf_token %}
+                {% include "partials/form_fields.html" with form=registration_form %}
+                <button name="registration_submit" type="submit" value="Register" class="btn btn-lg btn-primary" data-loading-text="{% trans 'Registering...' %}">{% trans 'Register' %}</button>
+            </form>
+            </div>
+
+
+
+
+{#            <form id="address_form" action="{{ request.get_full_path }}" method="post" class="well">#}
+{#                <h2>{% trans 'Address' %}</h2>#}
+{#                {% csrf_token %}#}
+{#                {% include "partials/form_fields.html" with form=address_form %}#}
+{#                <button name="address_submit" type="submit" value="Add Address" class="btn btn-lg btn-primary" data-loading-text="{% trans 'Registering...' %}">{% trans 'Add Address' %}</button>#}
+{#            </form>#}
+        </div>
+
+{% endblock content %}

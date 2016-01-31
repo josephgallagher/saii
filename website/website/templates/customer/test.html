@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+  <!-- Don't forget to include jQuery ;) -->
+  <script src="http://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+  <script src="../../../../node_modules/jquery-modal/jquery.modal.min.js" type="text/javascript" charset="utf-8"></script>
+  <link rel="stylesheet" href="../../../../node_modules/jquery-modal/jquery.modal.css" type="text/css" media="screen" />
+</head>
+<body>
+
+  <!-- Modal HTML embedded directly into document -->
+  <div id="ex1" style="display:none;">
+    <p>Thanks for clicking.  That felt good.  <a href="#" rel="modal:close">Close</a> or press ESC</p>
+  </div>
+
+  <!-- Link to open the modal -->
+  <p><a href="#ex1" rel="modal:open">Open Modal</a></p>
+
+</body>
+</html>

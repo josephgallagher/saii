@@ -16,7 +16,6 @@ import os
 from oscar.defaults import *
 from oscar import OSCAR_MAIN_TEMPLATE_DIR
 
-
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
 
@@ -30,7 +29,8 @@ THUMBNAIL_DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-# LOGIN_REDIRECT_URL = "customer:address-create"
+LOGIN_REDIRECT_URL = "customer:address-create"
+ADDRESS_REDIRECT_URL = "customer:address-create"
 
 OSCAR_SHOP_NAME = 'SAII'
 OSCAR_DEFAULT_CURRENCY = 'USD'
@@ -45,26 +45,31 @@ OSCAR_REQUIRED_ADDRESS_FIELDS = ('first_name', 'last_name', 'facility',
 from oscar import get_core_apps
 
 INSTALLED_APPS = [
-    'django.contrib.auth',
-    'django.contrib.admin',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.staticfiles',
-    'django.contrib.flatpages',
-    'compressor',
-    'widget_tweaks',
-    'datacash',
-    'website.apps.quotation',
-    'easy_pdf',
-    'pdfkit',
-    'corsheaders',
-    'stronghold',
+                     'django.contrib.auth',
+                     'django.contrib.admin',
+                     'django.contrib.contenttypes',
+                     'django.contrib.sessions',
+                     'django.contrib.sites',
+                     'django.contrib.messages',
+                     'django.contrib.staticfiles',
+                     'django.contrib.flatpages',
+                     'compressor',
+                     'widget_tweaks',
+                     'datacash',
+                     'website.apps.quotation',
+                     'easy_pdf',
+                     'pdfkit',
+                     'corsheaders',
+                     'stronghold',
+                     'website.apps.user',
+                     'django_modalview',
+                     # 'django.contrib.redirects'
+                     # 'paypal',
+                 ] + get_core_apps(
+    ['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.address',
+     'website.apps.shipping', 'website.apps.catalogue'])
 
-    # 'paypal',
-] + get_core_apps(['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.address', 'website.apps.shipping'])
-
+AUTH_USER_MODEL = "user.User"
 
 SITE_ID = 1
 
@@ -81,8 +86,9 @@ MIDDLEWARE_CLASSES = (
     'oscar.apps.basket.middleware.BasketMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'stronghold.middleware.LoginRequiredMiddleware',
+    # 'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
+    # 'website.middleware.AddressRequiredMiddleware.AddressRequiredMiddleware'
 )
-
 
 AUTHENTICATION_BACKENDS = (
     'oscar.apps.customer.auth_backends.EmailBackend',
@@ -123,7 +129,6 @@ TEMPLATES = [
     },
 ]
 
-
 TEMPLATE_CONTEXT_PROCESSORS = (
     "django.contrib.auth.context_processors.auth",
     "django.core.context_processors.request",
@@ -134,7 +139,6 @@ TEMPLATE_CONTEXT_PROCESSORS = (
     "django.core.context_processors.tz",
     "django.contrib.messages.context_processors.messages",
 )
-
 
 WSGI_APPLICATION = 'website.wsgi.application'
 
@@ -161,7 +165,7 @@ STATICFILES_FINDERS = (
 # See http://docs.djangoproject.com/en/dev/topics/logging for
 # more details on how to customize your logging configuration.
 # LOGGING = {
-#     'version': 1,
+# 'version': 1,
 #     'disable_existing_loggers': True,
 #     'formatters': {
 #         'verbose': {
@@ -294,9 +298,7 @@ DOCUMENT_URL = '/documents/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, "media/")
 
-
 STATIC_ROOT = os.path.join(BASE_DIR, "static/")
-
 
 DOCUMENT_ROOT = os.path.join(BASE_DIR, "documents/")
 
@@ -310,15 +312,12 @@ CORS_ORIGIN_WHITELIST = (
 
 CORS_ORIGIN_ALLOW_ALL = True
 
-
 USE_LESS = False
 COMPRESS_ENABLED = True
-
 
 COMPRESS_PRECOMPILERS = (
     ('text/less', 'lessc {infile} {outfile}'),
 )
-
 
 COMPRESS_OFFLINE_CONTEXT = {
     # this is the only default value from compressor itself
