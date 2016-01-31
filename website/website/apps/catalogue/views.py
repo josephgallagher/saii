@@ -22,7 +22,7 @@ from ..AddressRequiredMixin import AddressRequiredMixin
 
 
 
-class ProductDetailView(DetailView):
+class ProductDetailView(AddressRequiredMixin, DetailView):
     context_object_name = 'product'
     model = Product
     view_signal = product_viewed
@@ -117,7 +117,7 @@ class ProductDetailView(DetailView):
             '%s/detail.html' % (self.template_folder)]
 
 
-class CatalogueView(TemplateView):
+class CatalogueView(AddressRequiredMixin, TemplateView):
     """
     Browse all products in the catalogue
     """
@@ -146,7 +146,7 @@ class CatalogueView(TemplateView):
         return ctx
 
 
-class ProductCategoryView(TemplateView):
+class ProductCategoryView(AddressRequiredMixin, TemplateView):
     """
     Browse products in a given category
     """

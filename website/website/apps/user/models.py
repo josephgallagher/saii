@@ -8,10 +8,9 @@ from oscar.apps.customer.abstract_models import AbstractUser
 from oscar.core.loading import get_class, get_model
 
 
-# address = get_class('address.models', 'UserAddress')
-from ..address.models import UserAddress
-
 class User(AbstractUser):
+    serial_number = models.IntegerField(_("Serial Number"), null=True, blank=True)
+
 
     # def get_full_name(self):
     #     full_name = '%s %s' % (self.last_name.upper(), self.first_name)
@@ -20,7 +19,8 @@ class User(AbstractUser):
     # class Meta:
     #     db_table = 'auth_user'
 
-    facility = models.CharField(_("Facility"), max_length=20)
+    # facility = models.CharField(_("Facility"), max_length=20)
+
     # address = models.OneToOneField(
     #     UserAddress, related_name='address', verbose_name=_("Address"))
 

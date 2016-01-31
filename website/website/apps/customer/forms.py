@@ -15,6 +15,7 @@ from oscar.core.loading import get_profile_class, get_class, get_model
 from oscar.core.compat import get_user_model, existing_user_fields
 from oscar.apps.customer.utils import get_password_reset_url, normalise_email
 from oscar.core.validators import password_validators
+from oscar.apps.customer.forms import EmailUserCreationForm as CoreEmailUserCreationForm
 
 Dispatcher = get_class('customer.utils', 'Dispatcher')
 CommunicationEventType = get_model('customer', 'communicationeventtype')
@@ -131,105 +132,84 @@ class ConfirmPasswordForm(forms.Form):
         return password
 
 
+# from ..address.forms import UserAddressForm, UserAddress
+# # from ..address.models import UserAddress, Country
+#
+# class AddressCreationForm(UserAddressForm):
+#     form_class = UserAddressForm
+#
+#     def __init__(self, host=None, *args, **kwargs):
+#         self.host = host
+#         super(AddressCreationForm, self).__init__(*args, **kwargs)
+#
+#     class Meta:
+#         model = UserAddress
+#         fields = [
+#             'title', 'first_name', 'last_name',
+#             'line1', 'line2', 'line3', 'line4',
+#             'state', 'postcode', 'country',
+#             'phone_number',
+#         ]
+#
+#     # def clean_email(self):
+#     #     """
+#     #     Checks for existing users with the supplied email address.
+#     #     """
+#     #     email = normalise_email(self.cleaned_data['email'])
+#     #     if User._default_manager.filter(email__iexact=email).exists():
+#     #         raise forms.ValidationError(
+#     #             _("A user with that email address already exists"))
+#     #     return email
+#     #
+#     # def clean_password2(self):
+#     #     password1 = self.cleaned_data.get('password1', '')
+#     #     password2 = self.cleaned_data.get('password2', '')
+#     #     if password1 != password2:
+#     #         raise forms.ValidationError(
+#     #             _("The two password fields didn't match."))
+#     #     return password2
+#     #
+#     # def clean_redirect_url(self):
+#     #     url = self.cleaned_data['redirect_url'].strip()
+#     #     if url and is_safe_url(url, self.host):
+#     #         return url
+#     #     return settings.LOGIN_REDIRECT_URL
+#
+#     def save(self, commit=True):
+#         # user = super(AddressCreationForm, self).save(commit=False)
+#         # user.set_password(self.cleaned_data['password1'])
+#         # UserAddressForm.__init__(user=user)
+#         # self.instance.user = user
+#         # if 'username' in [f.name for f in User._meta.fields]:
+#         #     user.username = generate_username()
+#         # if commit:
+#         #     user.save()
+#         #     print user.username
+#         address = super(AddressCreationForm, self).save(commit=False)
+#         if commit:
+#             # user.save()
+#             # print user.username
+#             address.save()
+#             print address
+#         return address
+
+
+# from ..address.models import UserAddress
+# from django.forms.models import inlineformset_factory
+
+
 def validate_serial(num):
     if num > 2220000:
         raise ValidationError('%s is not a valid serial number!' % num)
 
 
-from ..address.forms import UserAddressForm, UserAddress
-# from ..address.models import UserAddress, Country
-from oscar.apps.customer.forms import EmailUserCreationForm as CoreEmailUserCreationForm
-
-class AddressCreationForm(UserAddressForm):
-    form_class = UserAddressForm
-
-    def __init__(self, host=None, *args, **kwargs):
-        self.host = host
-        super(AddressCreationForm, self).__init__(*args, **kwargs)
-
-    class Meta:
-        model = UserAddress
-        fields = [
-            'title', 'first_name', 'last_name',
-            'line1', 'line2', 'line3', 'line4',
-            'state', 'postcode', 'country',
-            'phone_number',
-        ]
-
-    # def clean_email(self):
-    #     """
-    #     Checks for existing users with the supplied email address.
-    #     """
-    #     email = normalise_email(self.cleaned_data['email'])
-    #     if User._default_manager.filter(email__iexact=email).exists():
-    #         raise forms.ValidationError(
-    #             _("A user with that email address already exists"))
-    #     return email
-    #
-    # def clean_password2(self):
-    #     password1 = self.cleaned_data.get('password1', '')
-    #     password2 = self.cleaned_data.get('password2', '')
-    #     if password1 != password2:
-    #         raise forms.ValidationError(
-    #             _("The two password fields didn't match."))
-    #     return password2
-    #
-    # def clean_redirect_url(self):
-    #     url = self.cleaned_data['redirect_url'].strip()
-    #     if url and is_safe_url(url, self.host):
-    #         return url
-    #     return settings.LOGIN_REDIRECT_URL
-
-    def save(self, commit=True):
-        # user = super(AddressCreationForm, self).save(commit=False)
-        # user.set_password(self.cleaned_data['password1'])
-        # UserAddressForm.__init__(user=user)
-        # self.instance.user = user
-        # if 'username' in [f.name for f in User._meta.fields]:
-        #     user.username = generate_username()
-        # if commit:
-        #     user.save()
-        #     print user.username
-        address = super(AddressCreationForm, self).save(commit=False)
-        if commit:
-            # user.save()
-            # print user.username
-            address.save()
-            print address
-        return address
-
-
-from ..address.models import UserAddress
-from django.forms.models import inlineformset_factory
-
-
 class EmailUserCreationForm(CoreEmailUserCreationForm):
     # form_class = User
-    # new_user = UserAddress()
-
-
-    # email = forms.EmailField(label=_('Email address'))
-    # # first_name = forms.CharField(label=_('First name'))
-    # # last_name = forms.CharField(label=_('Last name'))
-    # facility = forms.CharField(label=_('Facility'))
-    # new_user.line1 = str(facility)
-    # line2 = forms.CharField(label=_("Second line of address"), )
-    # new_user.line2 = str(line2)
-    # line3 = forms.CharField(label=_("Third line of address"), )
-    # new_user.line3 = str(line3)
-    # line4 = forms.CharField(label=_("City"), )
-    # new_user.line4 = str(line4)
-    # state = forms.CharField(label=_("State/County"), )
-    # new_user.state = str(state)
-    # postcode = forms.CharField(label=_("Post/Zip-code"), )
-    # new_user.postcode = str(postcode)
-    # new_user.is_default_for_shipping = True
-    # country = form_class.get_country(form_class)
 
     first_name = forms.CharField(label=_('First name'))
     last_name = forms.CharField(label=_('Last name'))
-    facility = forms.CharField(label=_('Facility'))
-    serial = forms.IntegerField(error_messages={'required': 'Please enter a valid number.'},
+    # facility = forms.CharField(label=_('Facility'))
+    serial_number = forms.IntegerField(error_messages={'required': 'Please enter a valid number.'},
                                 label=_('Serial Number'), widget=forms.NumberInput,
                                 help_text="From Control/Gating module", validators=[validate_serial])
     password1 = forms.CharField(
@@ -242,7 +222,7 @@ class EmailUserCreationForm(CoreEmailUserCreationForm):
 
     class Meta:
         model = User
-        fields = ('email', 'first_name', 'last_name', 'facility',)
+        fields = ('email', 'first_name', 'last_name', 'serial_number')
 
 
     def __init__(self, host=None, *args, **kwargs):
