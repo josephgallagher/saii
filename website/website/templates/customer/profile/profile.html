@@ -28,6 +28,18 @@
                             </tr>
                         {% endfor %}
                     {% endblock %}
+                    {% if not user.addresses.all|length == 0 %}
+                        {% for address in user.addresses.all %}
+                        {% if address.is_default_for_shipping %}
+{#                            {% for field in address  %}#}
+                                <tr>
+                                    <th>Facility</th>
+                                    <td>{{ address.line1|default:"-" }}</td>
+                                </tr>
+{#                            {% endfor %}#}
+                        {% endif %}
+                        {% endfor %}
+                    {% endif %}
                     <tr>
                         <th>{% trans 'Date registered' %}</th>
                         <td>{{ user.date_joined }}</td>

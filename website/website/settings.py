@@ -38,7 +38,7 @@ OSCAR_HIDDEN_FEATURES = ['reviews', 'wishlists']
 # Address settings
 OSCAR_REQUIRED_ADDRESS_FIELDS = ('first_name', 'last_name', 'facility',
                                  'postcode', 'country')
-
+ACCOUNT_DELETED_HOMEPAGE = "customer:logout"
 
 # Application definition
 
@@ -62,12 +62,11 @@ INSTALLED_APPS = [
                      'corsheaders',
                      'stronghold',
                      'website.apps.user',
-                     'django_modalview',
                      # 'django.contrib.redirects'
                      # 'paypal',
                  ] + get_core_apps(
     ['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.address',
-     'website.apps.shipping', 'website.apps.catalogue'])
+     'website.apps.shipping', 'website.apps.catalogue', 'website.apps.basket'])
 
 AUTH_USER_MODEL = "user.User"
 

@@ -146,6 +146,29 @@ class ProfileUpdateView(PageTitleMixin, generic.FormView):
         return redirect(self.get_success_url())
 
 
+class ProfileDeleteView(PageTitleMixin, generic.FormView):
+    form_class = ConfirmPasswordForm
+    template_name = 'customer/profile/profile_delete.html'
+    page_title = _('Delete profile')
+    active_tab = 'profile'
+    success_url = settings.ACCOUNT_DELETED_HOMEPAGE
+
+    def get_form_kwargs(self):
+        kwargs = super(ProfileDeleteView, self).get_form_kwargs()
+        kwargs['user'] = self.request.user
+        return kwargs
+
+    def form_valid(self, form):
+        self.request.user.is_active = False
+        self.request.user.save()
+        messages.success(
+            self.request,
+            _("Your profile has now been deleted. Thanks for using the site."))
+        print self.get_success_url()
+        return redirect(self.get_success_url())
+
+
+
 class OrderHistoryView(AddressRequiredMixin, PageTitleMixin, generic.ListView):
     """
     Customer order history

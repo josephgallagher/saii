@@ -130,7 +130,7 @@ class PaymentMethodView(CorePaymentDetailsView):
 # ==============
 # PDF
 # ==============
-import subprocess
+#import subprocess
 from weasyprint import HTML
 
 class PDFView(PDFTemplateView):
