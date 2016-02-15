@@ -6,3 +6,4 @@ website/quote.html
 website/website/settings_local.py
 website/website_nginx.conf
 website/uwsgi_params
+website/media/*.pdf
