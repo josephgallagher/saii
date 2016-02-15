@@ -119,14 +119,14 @@
             <tr>
                 <th>{% trans "Price" %}</th><td>{{ session.price.excl_tax|currency:session.price.currency }}</td>
             </tr>
-            {% if session.price.is_tax_known %}
-                <tr>
-                    <th>{% trans "Price (incl. tax)" %}</th><td>{{ session.price.incl_tax|currency:session.price.currency }}</td>
-                </tr>
-                <tr>
-                    <th>{% trans "Tax" %}</th><td>{{ session.price.tax|currency:session.price.currency }}</td>
-                </tr>
-            {% endif %}
+{#            {% if session.price.is_tax_known %}#}
+{#                <tr>#}
+{#                    <th>{% trans "Price (incl. tax)" %}</th><td>{{ session.price.incl_tax|currency:session.price.currency }}</td>#}
+{#                </tr>#}
+{#                <tr>#}
+{#                    <th>{% trans "Tax" %}</th><td>{{ session.price.tax|currency:session.price.currency }}</td>#}
+{#                </tr>#}
+{#            {% endif %}#}
             <tr>
                 <th>{% trans "Availability" %}</th>
                 <td>{{ session.availability.message }}</td>

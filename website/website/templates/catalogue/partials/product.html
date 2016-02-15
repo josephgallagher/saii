@@ -32,6 +32,13 @@
             <h3><a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">{{ product.get_title|truncatewords:12}}</a></h3>
         {% endblock %}
 
+
+        {% block part_number %}
+            <div class = "part_number">
+                <b>P/N:</b> <i>{{ product.upc }}</i>
+            </div>
+        {% endblock %}
+
 {#        {% block part_number %}#}
 {#            <h6><a href="{{ product.get_absolute_url }}" title="{{ product.get_title }}">{{ product.description|default:""|striptags }}</a></h6>#}
 {#        {% endblock %}#}

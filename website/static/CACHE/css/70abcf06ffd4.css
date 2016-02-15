@@ -251,8 +251,8 @@ th {
 }
 @font-face {
   font-family: 'Glyphicons Halflings';
-  src: url('../fonts/glyphicons-halflings-regular.eot');
-  src: url('../fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('../fonts/glyphicons-halflings-regular.woff') format('woff'), url('../fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('../fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
+  src: url('/static/oscar/fonts/glyphicons-halflings-regular.eot');
+  src: url('/static/oscar/fonts/glyphicons-halflings-regular.eot?#iefix') format('embedded-opentype'), url('/static/oscar/fonts/glyphicons-halflings-regular.woff') format('woff'), url('/static/oscar/fonts/glyphicons-halflings-regular.ttf') format('truetype'), url('/static/oscar/fonts/glyphicons-halflings-regular.svg#glyphicons_halflingsregular') format('svg');
 }
 .glyphicon {
   position: relative;
@@ -5391,8 +5391,8 @@ button.close {
  * -------------------------- */
 @font-face {
   font-family: 'FontAwesome';
-  src: url('../fonts/fontawesome-webfont.eot?v=3.2.1');
-  src: url('../fonts/fontawesome-webfont.eot?#iefix&v=3.2.1') format('embedded-opentype'), url('../fonts/fontawesome-webfont.woff?v=3.2.1') format('woff'), url('../fonts/fontawesome-webfont.ttf?v=3.2.1') format('truetype'), url('../fonts/fontawesome-webfont.svg#fontawesomeregular?v=3.2.1') format('svg');
+  src: url('/static/oscar/fonts/fontawesome-webfont.eot?v=3.2.1&388d4edc034f');
+  src: url('/static/oscar/fonts/fontawesome-webfont.eot?&388d4edc034f#iefix&v=3.2.1') format('embedded-opentype'), url('/static/oscar/fonts/fontawesome-webfont.woff?v=3.2.1&388d4edc034f') format('woff'), url('/static/oscar/fonts/fontawesome-webfont.ttf?v=3.2.1&388d4edc034f') format('truetype'), url('/static/oscar/fonts/fontawesome-webfont.svg?388d4edc034f#fontawesomeregular?v=3.2.1') format('svg');
   font-weight: normal;
   font-style: normal;
 }
@@ -8869,7 +8869,7 @@ ul.row {
   color: inherit;
   margin-top: 10px;
   margin-bottom: 10px;
-  font-size: 16px;
+  font-size: 14px;
   line-height: 1.42857143;
   margin-bottom: 0;
 }
@@ -8900,21 +8900,13 @@ ul.row {
   font-weight: 500;
   line-height: 1.1;
   color: inherit;
-  /*padding-top:30px;*/
-  font-size: 14px;
-  font-size: 12.5px;
+  margin-top: 50px;
+  margin-bottom: 50px;
+  font-size: 18px;
+  font-size: 16.1px;
   line-height: 1.4;
-  color: #808783;
-  border: 1px solid lightgray;
-  border-radius: 5px;
-}
-.product_pod .part_number {
-  position: absolute;
-  bottom: 25%;
-  width: 100%;
-}
-.product_pod .part_number div{
-
+  color: #5cb85c;
+  padding-top:50px;
 }
 .product_pod .price_color small,
 .product_pod .price_color .small {
