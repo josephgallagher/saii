@@ -94,8 +94,7 @@ class Dispatcher(object):
             email = EmailMultiAlternatives(messages['subject'],
                                            messages['body'],
                                            from_email=from_email,
-                                           to=[recipient, settings.RECIPIENTS],
-                                           bcc=['uhhhmmm@gmail.com'])
+                                           to=[recipient, ])
 
             # Generate and attach quotation pdf
             if 'code' in kwargs and kwargs['code'] == "ORDER_PLACED":

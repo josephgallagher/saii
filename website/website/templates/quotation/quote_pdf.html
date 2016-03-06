@@ -174,17 +174,27 @@
 
         <p class="recipient" style="float: left;">
             <strong>Quotation Number: {{ order_number }}</strong><br>
-            {{ address.line1 }}<br>
-            {{ address.line2 }}<br>
-            {{ address.line3 }}<br>
-            {{ address.line4 }}, {{ address.state }} {{ address.postcode }}<br>
+            {{ address.line1|title }}<br>
+            {% if address.line2 %}
+                {{ address.line2|title }}<br>
+            {% endif %}
+            {% if address.line3 %}
+                {{ address.line3|title }}<br>
+            {% endif %}
+            {% if address.line4 %}
+                {{ address.line4|title }},
+            {% endif %}
+            {% if address.state %}
+                {{ address.state }}
+            {% endif %}
+            {{ address.postcode }}<br>
             {{ address.country }}
         </p>
 
         <p class="recipient" style="float: right;">
 
             <strong>Requested by:</strong><br>
-            {{ user.first_name }} {{ user.last_name }}<br>
+            {{ user.first_name|title }} {{ user.last_name|title }}<br>
             {{ user.email }}<br>
             {{ datetime }} UTC</br>
 
