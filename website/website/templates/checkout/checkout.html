@@ -6,7 +6,7 @@
 
 {% block shipping_address %}
     <div class="span6">
-        <h3>{% trans "Shipping" %}</h3>
+        <h3>{% trans "Address" %}</h3>
         <div class="well well-info" data-behaviours="match-height">
             {% if shipping_address %}
                 <h4>{% trans "Address" %}</h4>
@@ -20,26 +20,26 @@
                 {% endif %}
 
                 {% if shipping_address.notes %}
-                    <p>{% trans "Shipping notes" %}</p>
+                    <p>{% trans "Delivery/order notes" %}</p>
                     <p>{{ shipping_address.notes|linebreaks }}</p>
                 {% endif %}
 
-                <h4>{% trans "Shipping method" %}</h4>
-                <p>{{ shipping_method.name }}
-                    {% if shipping_method.description %}
-                        - {{ shipping_method.description }}
-                    {% endif %}
-                </p>
+{#                <h4>{% trans "Shipping method" %}</h4>#}
+{#                <p>{{ shipping_method.name }}#}
+{#                    {% if shipping_method.description %}#}
+{#                        - {{ shipping_method.description }}#}
+{#                    {% endif %}#}
+{#                </p>#}
             </dl>
 
             {% block shipping_address_actions %}
                 <div class="alert-actions">
-                    <a href="{% url 'checkout:shipping-address' %}" class="btn">{% trans "Change shipping address" %}</a>
+                    <a href="{% url 'checkout:shipping-address' %}" class="btn">{% trans "Change facility address" %}</a>
                 </div>
             {% endblock %}
 
         {% else %}
-            {% trans "No shipping is required for this order" %}
+            {% trans "No address is required for this order" %}
         {% endif %}
     </div>
 </div>

@@ -9,13 +9,13 @@
     {% include 'checkout/nav.html' with step=1 %}
 {% endblock %}
 
-{% block checkout_title %}{% trans "Shipping address" %}{% endblock %}
+{% block checkout_title %}{% trans "Facility address" %}{% endblock %}
 
 {% block order_contents %}{% endblock %}
 
 {% block shipping_address %}
     <div class="sub-header">
-        <h2>{% trans "Where should we ship to?" %}</h2>
+        <h2>{% trans "What is your facility address?" %}</h2>
     </div>
     {% if user.is_authenticated %}
         {% if addresses %}
@@ -39,9 +39,9 @@
                                         <input type="hidden" name="address_id" value="{{ address.id }}" />
                                         <div class="">
                                             {% if address.is_default_for_shipping %}
-                                                <button type="submit" class="btn btn-success btn-large ship-address" data-loading-text="{% trans 'Saving...' %}"><i class="icon-ok"></i> {% trans "Ship to your default shipping address" %}</button>
+                                                <button type="submit" class="btn btn-success btn-large ship-address" data-loading-text="{% trans 'Saving...' %}"><i class="icon-ok"></i> {% trans "Ship to your default address" %}</button>
                                             {% else %}
-                                                <button type="submit" class="btn btn-primary btn-large ship-address" data-loading-text="{% trans 'Saving...' %}">{% trans "Ship to this address" %}</button>
+                                                <button type="submit" class="btn btn-primary btn-large ship-address" data-loading-text="{% trans 'Saving...' %}">{% trans "Select this address" %}</button>
                                             {% endif %}
                                         </div>
                                         <div class="btn-group address-controls">
