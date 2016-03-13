@@ -3,6 +3,7 @@
 {% load display_tags %}
 {% load i18n %}
 {% load reviews_tags %}
+{% load mathfilters %}
 
 {% block extra_breadcrumbs %}
     <li>
@@ -17,8 +18,8 @@
                 <th>{% trans 'Product' %}</th>
                 <th>{% trans 'Dispatch date' %}</th>
                 <th>{% trans 'Qty' %}</th>
-                <th>{% trans 'Line price excl. tax' %}</th>
-                <th>{% trans 'Line price incl. tax' %}</th>
+                <th>{% trans 'Line price' %}</th>
+                <th>{% trans 'Total per item' %}</th>
                 <th></th>
             </tr>
         </thead>
@@ -45,7 +46,8 @@
                         <td>{{ line.est_dispatch_date|default:"-" }}</td>
                         <td>{{ line.quantity }}</td>
                         <td>{{ line.line_price_before_discounts_excl_tax|currency:order.currency }}</td>
-                        <td>{{ line.line_price_before_discounts_incl_tax|currency:order.currency }}</td>
+{#                        <td>{{ line.line_price_before_discounts_incl_tax|currency:order.currency }}</td>#}
+                        <td>{{ line.line_price_before_discounts_incl_tax|mul:line.quantity|currency:order.currency }}</td>
                         <td width="90">
                             {% if product %}
                                 <form id="line_form_{{ line.id }}" action="{% url 'customer:order-line' order_number=order.number line_id=line.id %}" method="POST">

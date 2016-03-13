@@ -64,6 +64,7 @@ INSTALLED_APPS = [
                      'website.apps.user',
                      # 'django.contrib.redirects'
                      # 'paypal',
+                     'mathfilters'
                  ] + get_core_apps(
     ['website.apps.checkout', 'website.apps.payment', 'website.apps.customer', 'website.apps.address',
      'website.apps.shipping', 'website.apps.catalogue', 'website.apps.basket'])
