@@ -284,7 +284,7 @@ class OrderSearchForm(forms.Form):
         are listed.
         """
         if not self.is_bound or not self.is_valid():
-            return _('All orders')
+            return _('All requests')
         else:
             date_from = self.cleaned_data['date_from']
             date_to = self.cleaned_data['date_to']

@@ -45,7 +45,7 @@ class CheckoutApplication(Application):
             #     self.request_quote_view.as_view(), name='request-quote'),
 
             # Shipping/user address views
-            url(r'shipping-address/$',
+            url(r'facility-address/$',
                 self.shipping_address_view.as_view(), name='shipping-address'),
             url(r'user-address/edit/(?P<pk>\d+)/$',
                 self.user_address_update_view.as_view(),
