@@ -16,7 +16,7 @@
         <thead>
             <tr>
                 <th>{% trans 'Product' %}</th>
-                <th>{% trans 'Dispatch date' %}</th>
+{#                <th>{% trans 'Dispatch date' %}</th>#}
                 <th>{% trans 'Qty' %}</th>
                 <th>{% trans 'Line price' %}</th>
                 <th>{% trans 'Total per item' %}</th>
@@ -43,11 +43,11 @@
                                 </p>
                             {% endif %}
                         </td>
-                        <td>{{ line.est_dispatch_date|default:"-" }}</td>
+{#                        <td>{{ line.est_dispatch_date|default:"-" }}</td>#}
                         <td>{{ line.quantity }}</td>
+                        <td>{{ line.line_price_before_discounts_excl_tax|div:line.quantity|currency:order.currency }}</td>
                         <td>{{ line.line_price_before_discounts_excl_tax|currency:order.currency }}</td>
 {#                        <td>{{ line.line_price_before_discounts_incl_tax|currency:order.currency }}</td>#}
-                        <td>{{ line.line_price_before_discounts_incl_tax|mul:line.quantity|currency:order.currency }}</td>
                         <td width="90">
                             {% if product %}
                                 <form id="line_form_{{ line.id }}" action="{% url 'customer:order-line' order_number=order.number line_id=line.id %}" method="POST">
@@ -126,7 +126,7 @@
 
             {% block order_total %}
                 <tr>
-                    <th colspan="4">{% trans 'Order total' %}</th>
+                    <th colspan="3">{% trans 'Order total' %}</th>
                     <td colspan="2">{{ order.total_incl_tax|currency:order.currency }}</td>
                 </tr>
             {% endblock order_total %}
