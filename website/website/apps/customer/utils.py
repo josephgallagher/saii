@@ -11,6 +11,8 @@ from django.utils.encoding import force_bytes
 
 from oscar.core.loading import get_model
 
+from retrying import retry
+
 CommunicationEvent = get_model('order', 'CommunicationEvent')
 Email = get_model('customer', 'Email')
 
@@ -80,6 +82,7 @@ class Dispatcher(object):
                                           body_text=email.body,
                                           body_html=messages['html'])
 
+    @retry(stop_max_attempt_number=25, wait_fixed=10000, stop_max_delay=100000)
     def send_email_messages(self, recipient, messages, **kwargs):
         """
         Plain email sending to the specified recipient

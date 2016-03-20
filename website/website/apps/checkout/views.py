@@ -92,6 +92,7 @@ from django.contrib import messages
 from oscar.apps.shipping.methods import NoShippingRequired
 
 
+
 Dispatcher = get_class('customer.utils', 'Dispatcher')
 UserAddress = get_model('address', 'UserAddress')
 RedirectRequired, UnableToTakePayment, PaymentError \
@@ -546,21 +547,25 @@ class PaymentDetailsView(CorePaymentDetailsView):
         # If all is ok with payment, try and place order
         logger.info("Order #%s: payment successful, placing order",
                     order_number)
-        print 100 * ("USER: %s\n" % str(user.email))
         try:
-            template_src = "quotation/quote_pdf.html"
-            pdf = PDFView()
-            # print 100 * ("USER: %s\n" % str(user.email))
+            try:
+                template_src = "quotation/quote_pdf.html"
+                pdf = PDFView()
+                # print 100 * ("USER: %s\n" % str(user.email))
 
-            PDFView.render_to_pdf(pdf, template_src,
-                                  {"title": "Quote Request", 'basket': basket, 'order_number': order_number,
-                                   'user': user, 'email': user.email, 'shipping_method': shipping_method, 'shipping_charge': shipping_charge,
-                                   'address': shipping_address, 'order_total': order_total, 'datetime': datetime.now()},
-                                  "media/quote" + str(basket.id) + ".pdf")
+                PDFView.render_to_pdf(pdf, template_src,
+                                      {"title": "Quote Request", 'basket': basket, 'order_number': order_number,
+                                       'user': user, 'email': user.email, 'shipping_method': shipping_method, 'shipping_charge': shipping_charge,
+                                       'address': shipping_address, 'order_total': order_total, 'datetime': datetime.now()},
+                                      "media/quote" + str(basket.id) + ".pdf")
+            except:
+                pass
+
 
             return self.handle_order_placement(
                 order_number, user, basket, shipping_address, shipping_method,
                 shipping_charge, billing_address, order_total, **order_kwargs)
+
         except UnableToPlaceOrder as e:
             # It's possible that something will go wrong while trying to
             # actually place an order.  Not a good situation to be in as a
@@ -572,6 +577,7 @@ class PaymentDetailsView(CorePaymentDetailsView):
             self.restore_frozen_basket()
             return self.render_preview(
                 self.request, error=msg, **payment_kwargs)
+
 
     def get_template_names(self):
         return [self.template_name_preview] if self.preview else [
