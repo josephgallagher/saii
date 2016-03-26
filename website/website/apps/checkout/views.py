@@ -92,7 +92,6 @@ from django.contrib import messages
 from oscar.apps.shipping.methods import NoShippingRequired
 
 
-
 Dispatcher = get_class('customer.utils', 'Dispatcher')
 UserAddress = get_model('address', 'UserAddress')
 RedirectRequired, UnableToTakePayment, PaymentError \
@@ -548,19 +547,15 @@ class PaymentDetailsView(CorePaymentDetailsView):
         logger.info("Order #%s: payment successful, placing order",
                     order_number)
         try:
-            try:
-                template_src = "quotation/quote_pdf.html"
-                pdf = PDFView()
-                # print 100 * ("USER: %s\n" % str(user.email))
+            template_src = "quotation/quote_pdf.html"
+            pdf = PDFView()
+            # print 100 * ("USER: %s\n" % str(user.email))
 
-                PDFView.render_to_pdf(pdf, template_src,
-                                      {"title": "Quote Request", 'basket': basket, 'order_number': order_number,
-                                       'user': user, 'email': user.email, 'shipping_method': shipping_method, 'shipping_charge': shipping_charge,
-                                       'address': shipping_address, 'order_total': order_total, 'datetime': datetime.now()},
-                                      "media/quote" + str(basket.id) + ".pdf")
-            except:
-                pass
-
+            PDFView.render_to_pdf(pdf, template_src,
+                                  {"title": "Quote Request", 'basket': basket, 'order_number': order_number,
+                                   'user': user, 'email': user.email, 'shipping_method': shipping_method, 'shipping_charge': shipping_charge,
+                                   'address': shipping_address, 'order_total': order_total, 'datetime': datetime.now()},
+                                  "media/quote" + str(basket.id) + ".pdf")
 
             return self.handle_order_placement(
                 order_number, user, basket, shipping_address, shipping_method,
