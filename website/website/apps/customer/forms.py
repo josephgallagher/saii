@@ -199,7 +199,7 @@ class ConfirmPasswordForm(forms.Form):
 
 
 def validate_serial(num):
-    if num > 2220000:
+    if num > 22200000:
         raise ValidationError('%s is not a valid serial number!' % num)
 
 

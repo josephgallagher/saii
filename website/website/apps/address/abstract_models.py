@@ -219,20 +219,20 @@ class AbstractAddress(models.Model):
     title = models.CharField(
         pgettext_lazy(u"Treatment Pronouns for the customer", u"Title"),
         max_length=64, choices=TITLE_CHOICES, blank=True)
-    first_name = models.CharField(_("First name"), max_length=255, blank=True)
-    last_name = models.CharField(_("Last name"), max_length=255, blank=True)
+    first_name = models.CharField(_("First name"), max_length=20, blank=True)
+    last_name = models.CharField(_("Last name"), max_length=20, blank=True)
 
     # We use quite a few lines of an address as they are often quite long and
     # it's easier to just hide the unnecessary ones than add extra ones.
-    line1 = models.CharField(_("Facility"), max_length=255)
+    line1 = models.CharField(_("Facility"), max_length=48)
     line2 = models.CharField(
-        _("Second line of address"), max_length=255, blank=True)
+        _("Second line of address"), max_length=48, blank=True)
     line3 = models.CharField(
-        _("Third line of address"), max_length=255, blank=True)
-    line4 = models.CharField(_("City"), max_length=255, blank=True)
-    state = models.CharField(_("State/County"), max_length=255, blank=True)
+        _("Third line of address"), max_length=48, blank=True)
+    line4 = models.CharField(_("City"), max_length=25, blank=True)
+    state = models.CharField(_("State/County"), max_length=20, blank=True)
     postcode = UppercaseCharField(
-        _("Post/Zip-code"), max_length=64, blank=True)
+        _("Post/Zip-code"), max_length=20, blank=True)
     country = models.ForeignKey('address.Country', verbose_name=_("Country"))
 
     #: A field only used for searching addresses - this contains all the
@@ -252,6 +252,7 @@ class AbstractAddress(models.Model):
 
     def save(self, *args, **kwargs):
         self._update_search_text()
+        
         super(AbstractAddress, self).save(*args, **kwargs)
 
     def clean(self):
