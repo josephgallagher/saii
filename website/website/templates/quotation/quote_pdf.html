@@ -270,7 +270,7 @@
                 <tbody>
                 {% for line in basket.lines.all %}
                     <tr>
-                        <td class="text-left">{{ line.product }}</td>
+                        <td class="text-left">{{ line.product }}, P/N: {{line.product.upc}}</td>
                         <td class="text-right">{{ line.quantity }}</td>
                         <td class="text-right">{{ line.unit_price_incl_tax|currency:basket.currency }}</td>
                         <td class="text-right">{{ line.line_price_incl_tax|currency:basket.currency }}</td>
